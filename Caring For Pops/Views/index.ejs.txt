@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Caring for Pops</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>Trusted home health care, simplified.</h1>
+    <p>Tell us what you need — we’ll match you with a trusted provider.</p>
+  </header>
+
+  <form action="/submit-lead" method="POST">
+    <label>Your Name</label>
+    <input name="name" required />
+
+    <label>Who is this care for?</label>
+    <input name="recipient" required />
+
+    <label>Phone</label>
+    <input name="phone" required />
+
+    <label>Email</label>
+    <input name="email" type="email" required />
+
+    <label>Zip Code</label>
+    <input name="zip" required />
+
+    <label>Type of Care</label>
+    <select name="type">
+      <option>Companion Care</option>
+      <option>Skilled Nursing</option>
+      <option>Hospice</option>
+      <option>Other</option>
+    </select>
+
+    <label>Duration</label>
+    <select name="duration">
+      <option>Temporary</option>
+      <option>Long-term</option>
+      <option>Unknown</option>
+    </select>
+
+    <label>Preferred Contact Method</label>
+    <select name="contactMethod">
+      <option>Call</option>
+      <option>Text</option>
+      <option>Email</option>
+    </select>
+
+    <button type="submit">Find a Provider</button>
+  </form>
+
+  <p class="affiliate-link">
+    Are you a provider? <a href="/provider-login">Become an Affiliate</a>
+  </p>
+</body>
+</html>
