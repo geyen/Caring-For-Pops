@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Login - Caring for Pops</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 20px;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    .nav-link {
+      color: #4b5563;
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+    .nav-link:hover {
+      color: #2563eb;
+    }
+    .nav-link.highlight {
+      color: #2563eb;
+      font-weight: 600;
+    }
+    .login-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .login-form {
+      flex: 1;
+      min-width: 300px;
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 30px;
+    }
+    .login-info {
+      flex: 1;
+      min-width: 300px;
+    }
+    h1 {
+      color: #1f2937;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #2563eb;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .submit-button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+    .submit-button:hover {
+      background: #1d4ed8;
+    }
+    .error-message {
+      color: #ef4444;
+      margin-top: 10px;
+      display: none;
+    }
+    .benefits {
+      margin-top: 30px;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .benefit-check {
+      color: #10b981;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .secondary-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #4b5563;
+      text-decoration: none;
+    }
+    .secondary-link:hover {
+      color: #2563eb;
+    }
+    footer {
+      margin-top: 80px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.9rem;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">Caring for Pops</a>
+    <nav class="nav-links">
+      <a href="/portal" class="nav-link">Home</a>
+      <a href="/test-provider-application" class="nav-link">Apply as Provider</a>
+      <a href="/provider-login" class="nav-link highlight">Provider Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Provider Login</h1>
+    
+    <div class="login-container">
+      <div class="login-form">
+        <h2>Welcome Back</h2>
+        <p>Log in to access your dashboard and manage your leads.</p>
+        
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          
+          <button type="submit" class="submit-button">Log In</button>
+          
+          <div id="error-message" class="error-message">
+            Invalid username or password. Please try again.
+          </div>
+        </form>
+        
+        <a href="/test-provider-application" class="secondary-link">Not a provider yet? Apply now</a>
+      </div>
+      
+      <div class="login-info">
+        <h2>Provider Benefits</h2>
+        <p>As a Caring for Pops provider, you gain access to:</p>
+        
+        <div class="benefits">
+          <div class="benefit-item">
+            <span class="benefit-check">✓</span>
+            <div>
+              <strong>Quality Leads</strong>
+              <p>Receive pre-screened leads from clients seeking your specific services.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item">
+            <span class="benefit-check">✓</span>
+            <div>
+              <strong>Real-time Notifications</strong>
+              <p>Get instant alerts when new leads match your service profile.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item">
+            <span class="benefit-check">✓</span>
+            <div>
+              <strong>Profile Management</strong>
+              <p>Showcase your services, expertise, and availability to potential clients.</p>
+            </div>
+          </div>
+          
+          <div class="benefit-item">
+            <span class="benefit-check">✓</span>
+            <div>
+              <strong>Subscription Options</strong>
+              <p>Choose from various subscription plans based on your business needs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Caring for Pops. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.style.display = 'none';
+      
+      const formData = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+      };
+      
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData),
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const user = await response.json();
+          // Redirect to provider dashboard
+          window.location.href = '/provider-dashboard';
+        } else {
+          // Show error message
+          errorMessage.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

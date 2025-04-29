@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caring for Pops - Test Navigation</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8fafc;
+    }
+    h1 {
+      color: #2563eb;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .links-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .link-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .link-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    h2 {
+      color: #4b5563;
+      margin-bottom: 10px;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+    }
+    .btn-secondary {
+      background: #6b7280;
+    }
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    .description {
+      color: #6b7280;
+      margin-bottom: 15px;
+    }
+    .note {
+      background: #fff7ed;
+      border-left: 4px solid #f97316;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+    #api-result {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      display: none;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Caring for Pops - Test Navigation</h1>
+  
+  <div class="note">
+    <strong>Troubleshooting Note:</strong> We're experiencing navigation issues with the provider application workflow.
+    This page is designed to test different approaches to accessing the provider application form.
+  </div>
+  
+  <div class="links-container">
+    <div class="link-item">
+      <h2>Standalone HTML Provider Application</h2>
+      <p class="description">Test the provider application form with direct HTML (bypassing React)</p>
+      <div class="buttons">
+        <a href="/test-provider-application" class="btn">Open Standalone Provider Form</a>
+      </div>
+    </div>
+    
+    <div class="link-item">
+      <h2>React App Routes</h2>
+      <p class="description">Test navigation to React app routes with different formats</p>
+      <div class="buttons">
+        <button onclick="navigateTo('/#/provider-application')" class="btn">HashRouter Provider App</button>
+        <button onclick="navigateTo('/provider-application')" class="btn">BrowserRouter Provider App</button>
+        <button onclick="navigateTo('/')" class="btn-secondary">Home Page</button>
+      </div>
+    </div>
+    
+    <div class="link-item">
+      <h2>Provider API Test</h2>
+      <p class="description">Test submitting a provider application directly via API</p>
+      <div class="buttons">
+        <button onclick="testProviderApi()" class="btn">Submit Test Provider</button>
+        <button onclick="testHealthApi()" class="btn-secondary">Test API Health</button>
+      </div>
+      <div id="api-result"></div>
+    </div>
+    
+    <div class="link-item">
+      <h2>Debugging Information</h2>
+      <p class="description">View system information to help diagnose the issue</p>
+      <div class="buttons">
+        <button onclick="showEnvironmentInfo()" class="btn">Show Browser Info</button>
+        <button onclick="testRouting()" class="btn-secondary">Test Routing</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function navigateTo(path) {
+      console.log('Navigating to:', path);
+      window.location.href = path;
+    }
+    
+    async function testProviderApi() {
+      const resultDiv = document.getElementById('api-result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = 'Testing provider API...';
+      
+      try {
+        const testData = {
+          name: 'Test Provider Agency',
+          location: 'Minneapolis, MN 55403',
+          services: 'Home health care, companion care, memory care',
+          phone: '612-555-7890',
+          email: 'test@example.com',
+          isAffiliate: false
+        };
+        
+        console.log('Submitting provider data:', testData);
+        
+        const response = await fetch('/api/providers/apply', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(testData)
+        });
+        
+        console.log('Response status:', response.status);
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        resultDiv.innerHTML = `<strong>Status:</strong> ${response.status} ${response.statusText}<br><strong>Data:</strong> <pre>${JSON.stringify(data, null, 2)}</pre>`;
+      } catch (error) {
+        console.error('API test error:', error);
+        resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+      }
+    }
+    
+    async function testHealthApi() {
+      const resultDiv = document.getElementById('api-result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = 'Testing health API...';
+      
+      try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        resultDiv.innerHTML = `<strong>Status:</strong> ${response.status} ${response.statusText}<br><strong>Data:</strong> <pre>${JSON.stringify(data, null, 2)}</pre>`;
+      } catch (error) {
+        resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+      }
+    }
+    
+    function showEnvironmentInfo() {
+      const resultDiv = document.getElementById('api-result');
+      resultDiv.style.display = 'block';
+      
+      const info = {
+        userAgent: navigator.userAgent,
+        location: window.location.href,
+        pathname: window.location.pathname,
+        hash: window.location.hash,
+        protocol: window.location.protocol,
+        host: window.location.host,
+        search: window.location.search
+      };
+      
+      resultDiv.innerHTML = `<strong>Browser Environment:</strong><pre>${JSON.stringify(info, null, 2)}</pre>`;
+    }
+    
+    async function testRouting() {
+      const resultDiv = document.getElementById('api-result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = 'Testing route accessibility...';
+      
+      const routes = [
+        '/api/health',
+        '/test-provider-application',
+        '/debug/test-provider-application',
+        '/'
+      ];
+      
+      const results = {};
+      
+      for (const route of routes) {
+        try {
+          const response = await fetch(route, {
+            method: 'GET',
+            headers: { 'Accept': 'text/html,application/json' }
+          });
+          
+          results[route] = {
+            status: response.status,
+            ok: response.ok,
+            contentType: response.headers.get('content-type')
+          };
+        } catch (error) {
+          results[route] = { error: error.message };
+        }
+      }
+      
+      resultDiv.innerHTML = `<strong>Route Test Results:</strong><pre>${JSON.stringify(results, null, 2)}</pre>`;
+    }
+  </script>
+</body>
+</html>
