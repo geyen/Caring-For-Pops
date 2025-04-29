@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caring for Pops - Home Health Care Lead Generation</title>
+    <style>
+        /* Modern CSS with teal/turquoise primary and purple accent */
+        :root {
+            --primary-color: #25b5b8;
+            --primary-light: #e0f4f4;
+            --primary-dark: #1a8c8e;
+            --secondary-color: #6b4aa5;
+            --secondary-light: #ede7f6;
+            --secondary-dark: #563c84;
+            --text-color: #333333;
+            --text-light: #666666;
+            --background-color: #ffffff;
+            --background-light: #f8f9fa;
+            --border-color: #e1e4e8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--background-light);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        .features {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .lead-form-section {
+            padding: 80px 0;
+            background-color: var(--primary-light);
+        }
+
+        .lead-form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .form-description {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .form-description h2 {
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .lead-form {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 181, 184, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .team-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .team-member {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .member-image.circular {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            border: 4px solid var(--primary-light);
+        }
+
+        .member-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .member-info h3 {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .member-info p.position {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background-color: var(--secondary-dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <img src="images/Caring for Pops.png" alt="Caring for Pops Logo" class="logo">
+                    <div class="company-name">Caring for Pops</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#lead-form">Find Care</a></li>
+                        <li><a href="#team">Our Team</a></li>
+                        <li><a href="provider.html">Provider Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Finding Home Care Shouldn't Be Hard</h1>
+            <p>Caring for Pops connects families with trusted home health care providers in your area. Our personalized matching service helps you find the right care for your loved ones.</p>
+            <a href="#lead-form" class="btn">Find Care Now</a>
+            <a href="provider.html" class="btn btn-secondary">Provider Login</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>How We Help</h2>
+                <p>Our platform simplifies the process of finding quality home health care with these key features:</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="images/personalized-icon.svg" alt="Personalized Matching" class="feature-icon">
+                    <h3>Personalized Matching</h3>
+                    <p>Our intelligent matching system connects you with qualified care providers that meet your specific needs and preferences.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="images/quality-icon.svg" alt="Quality Assurance" class="feature-icon">
+                    <h3>Quality Assurance</h3>
+                    <p>We carefully vet all providers on our platform to ensure they meet the highest standards of care and professionalism.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="images/compassion-icon.svg" alt="Compassionate Support" class="feature-icon">
+                    <h3>Compassionate Support</h3>
+                    <p>Our team understands the challenges of finding care for loved ones and provides guidance throughout the process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="lead-form-section" id="lead-form">
+        <div class="container">
+            <div class="lead-form-container">
+                <div class="form-description">
+                    <h2>Find Care for Your Loved One</h2>
+                    <p>Complete this form to be matched with qualified home health care providers in your area. Our service is free for families seeking care.</p>
+                    <p>Once you submit your information, providers will contact you directly to discuss your needs and their services.</p>
+                    <ul style="margin-left: 20px; margin-top: 20px;">
+                        <li>No account creation required</li>
+                        <li>Receive responses within 24-48 hours</li>
+                        <li>Compare providers easily</li>
+                        <li>Private and secure process</li>
+                    </ul>
+                </div>
+                <form class="lead-form" action="/submit-lead" method="post" id="leadForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="zipCode">Zip Code</label>
+                        <input type="text" id="zipCode" name="zipCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="careType">Type of Care Needed</label>
+                        <select id="careType" name="careType" required>
+                            <option value="">Select care type</option>
+                            <option value="personal">Personal Care</option>
+                            <option value="nursing">Skilled Nursing</option>
+                            <option value="companionship">Companionship</option>
+                            <option value="respite">Respite Care</option>
+                            <option value="hospice">Hospice Support</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="careFrequency">Care Frequency</label>
+                        <select id="careFrequency" name="careFrequency" required>
+                            <option value="">Select frequency</option>
+                            <option value="daily">Daily (7 days/week)</option>
+                            <option value="weekdays">Weekdays Only</option>
+                            <option value="parttime">Part-time (2-3 days/week)</option>
+                            <option value="overnight">Overnight Care</option>
+                            <option value="livein">Live-in Care</option>
+                            <option value="asneeded">As Needed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="additionalInfo">Additional Information</label>
+                        <textarea id="additionalInfo" name="additionalInfo" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Submit Request</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section" id="team">
+        <div class="container">
+            <div class="section-title">
+                <h2>Meet Our Team</h2>
+                <p>The caring professionals behind our mission to improve home health care access</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="images/Untitled design (15).png" alt="Lyndsay Geyen" class="member-image circular">
+                    <div class="member-info">
+                        <h3>Lyndsay Geyen</h3>
+                        <p class="position">Founder & CEO</p>
+                        <p>With over 15 years of experience in healthcare administration, Lyndsay founded Caring for Pops to solve the challenges families face when finding quality home care.</p>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="images/IMG_8341.WEBP" alt="Christopher Geyen" class="member-image circular">
+                    <div class="member-info">
+                        <h3>Christopher Geyen</h3>
+                        <p class="position">Lead Developer</p>
+                        <p>Christopher brings technical expertise to our platform, ensuring a seamless experience for both families and providers using the latest technology.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Caring for Pops</h3>
+                    <p>Connecting families with trusted home health care providers since 2021.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#features">How It Works</a></li>
+                        <li><a href="#lead-form">Find Care</a></li>
+                        <li><a href="provider.html">For Providers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Home Care Guide</a></li>
+                        <li><a href="#">Caregiver Resources</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="mailto:info@caringforpops.com">info@caringforpops.com</a></li>
+                        <li><a href="tel:+18002279677">1-800-CARE-POP</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Caring for Pops. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real implementation, you'd send the form data to your server
+            // For now, we'll just redirect to the thank you page
+            window.location.href = 'direct-thank-you.html?ref=' + Math.floor(Math.random() * 1000000);
+        });
+    </script>
+</body>
+</html>

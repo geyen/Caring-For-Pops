@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Login - Caring for Pops</title>
+  <style>
+    /* Base Styles */
+    :root {
+      --primary-color: #25b5b8;
+      --primary-light: #e0f4f4;
+      --primary-dark: #1a8c8e;
+      --secondary-color: #6b4aa5;
+      --secondary-light: #ede7f6;
+      --secondary-dark: #563c84;
+      --text-color: #333333;
+      --text-light: #666666;
+      --background-color: #ffffff;
+      --background-light: #f8f9fa;
+      --border-color: #e1e4e8;
+      --success-color: #2ecc71;
+      --error-color: #e74c3c;
+      --warning-color: #f39c12;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --border-radius: 8px;
+      --font-main: 'Montserrat', 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--text-color);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    button, .btn {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 12px 24px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--secondary-dark);
+      color: white;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Header Styles */
+    header {
+      padding: 20px 0;
+      background-color: var(--background-color);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo svg {
+      height: 50px;
+      width: auto;
+    }
+
+    /* Provider Login Styles */
+    .provider-login-section {
+      padding: 60px 0;
+      background-color: var(--background-light);
+    }
+
+    .provider-login-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .provider-info h2 {
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    .benefits {
+      margin-top: 40px;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+
+    .benefit-icon {
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      margin-right: 15px;
+      margin-top: 5px;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+    }
+
+    .benefit-item h3 {
+      margin-bottom: 5px;
+      font-size: 1.2rem;
+    }
+
+    .benefit-item p {
+      color: var(--text-light);
+      margin-bottom: 0;
+    }
+
+    .login-form-container {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 15px;
+      background: none;
+      border: none;
+      font-weight: 600;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .tab-content {
+      padding: 30px;
+    }
+
+    .login-form h3, .signup-form h3 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+
+    .remember-me input {
+      width: auto;
+      margin-right: 8px;
+      margin-bottom: 0;
+    }
+
+    .remember-me label {
+      margin-bottom: 0;
+      font-weight: normal;
+    }
+
+    .forgot-password {
+      color: var(--primary-color);
+      font-size: 0.9rem;
+    }
+
+    .terms-agreement {
+      margin-bottom: 25px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .terms-agreement input {
+      width: auto;
+      margin-right: 10px;
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+
+    .terms-agreement label {
+      margin-bottom: 0;
+      font-weight: normal;
+      font-size: 0.9rem;
+    }
+
+    /* Form Styles */
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    /* Subscription Plans */
+    .subscription-plans {
+      padding: 80px 0;
+      background-color: white;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 50px;
+      font-size: 1.2rem;
+    }
+
+    .plans-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .plan-card {
+      background-color: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow);
+    }
+
+    .plan-card.featured {
+      border-color: var(--primary-color);
+      box-shadow: 0 8px 30px rgba(37, 181, 184, 0.2);
+      transform: scale(1.05);
+    }
+
+    .plan-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .plan-tag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-bottom-left-radius: var(--border-radius);
+    }
+
+    .plan-header {
+      padding: 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .plan-header h3 {
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+
+    .plan-price {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .period {
+      font-size: 1rem;
+      color: var(--text-light);
+      margin-left: 5px;
+    }
+
+    .price-detail {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0;
+    }
+
+    .plan-features {
+      padding: 30px;
+    }
+
+    .plan-features ul {
+      list-style: none;
+    }
+
+    .plan-features li {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .plan-features li:last-child {
+      margin-bottom: 0;
+    }
+
+    .plan-features li .check-icon {
+      color: var(--success-color);
+      margin-right: 10px;
+      display: inline-block;
+      width: 20px;
+    }
+
+    .plan-footer {
+      padding: 0 30px 30px;
+      text-align: center;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 80px 0;
+      background-color: var(--background-light);
+    }
+
+    .testimonials-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .testimonial {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .testimonial-content {
+      padding: 30px;
+      position: relative;
+    }
+
+    .testimonial-content::before {
+      content: '"';
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      font-size: 4rem;
+      color: var(--primary-light);
+      font-family: serif;
+      z-index: 0;
+    }
+
+    .testimonial-content p {
+      position: relative;
+      z-index: 1;
+      font-style: italic;
+      margin-bottom: 0;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      padding: 20px 30px;
+      background-color: var(--primary-light);
+    }
+
+    .author-info h4 {
+      margin-bottom: 5px;
+      color: var(--primary-dark);
+    }
+
+    .author-info p {
+      margin-bottom: 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--secondary-dark);
+      color: white;
+      padding: 60px 0 20px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-section h3 {
+      color: white;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background-color: var(--primary-color);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--primary-color);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ccc;
+    }
+
+    /* Preview navigation bar */
+    .preview-nav {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+    }
+
+    .preview-nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    .preview-nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .provider-login-container {
+        grid-template-columns: 1fr;
+      }
+
+      .provider-info {
+        order: 2;
+      }
+
+      .login-form-container {
+        order: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .featured {
+        transform: scale(1);
+      }
+      
+      .featured:hover {
+        transform: translateY(-10px);
+      }
+
+      .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .forgot-password {
+        margin-left: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-nav">
+    Preview Mode | 
+    <a href="direct-preview.html">Home</a> | 
+    <a href="#provider-login">Provider Login</a> | 
+    <a href="direct-thank-you.html">Thank You Page</a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <a href="direct-preview.html">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="80" height="80" rx="8" fill="#f0f9fa"/>
+            <path d="M40 12C24.536 12 12 24.536 12 40C12 55.464 24.536 68 40 68C55.464 68 68 55.464 68 40C68 24.536 55.464 12 40 12Z" fill="#25b5b8" fill-opacity="0.2"/>
+            <path d="M28 36C28 31.582 31.582 28 36 28H44C48.418 28 52 31.582 52 36V44C52 48.418 48.418 52 44 52H36C31.582 52 28 48.418 28 44V36Z" fill="#6b4aa5" fill-opacity="0.2"/>
+            <path d="M40 20C29.335 20 20.667 28.667 20.667 39.333C20.667 50 29.335 58.667 40 58.667C50.665 58.667 59.333 50 59.333 39.333C59.333 28.667 50.665 20 40 20Z" stroke="#6b4aa5" stroke-width="2" stroke-linecap="round"/>
+            <path d="M33.333 40C33.333 36.318 36.318 33.333 40 33.333C43.682 33.333 46.667 36.318 46.667 40C46.667 43.682 43.682 46.667 40 46.667C36.318 46.667 33.333 43.682 33.333 40Z" stroke="#25b5b8" stroke-width="2"/>
+            <path d="M40 33.333V28" stroke="#25b5b8" stroke-width="2" stroke-linecap="round"/>
+            <path d="M46.667 40H52" stroke="#25b5b8" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40 46.667V52" stroke="#25b5b8" stroke-width="2" stroke-linecap="round"/>
+            <path d="M33.333 40H28" stroke="#25b5b8" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Provider Login Section -->
+  <section class="provider-login-section" id="provider-login">
+    <div class="container">
+      <div class="provider-login-container">
+        <div class="provider-info">
+          <h2>Access Quality Leads in Your Area</h2>
+          <p>Join our network of trusted home health care providers and grow your business with verified leads.</p>
+          
+          <div class="benefits">
+            <div class="benefit-item">
+              <div class="benefit-icon">📍</div>
+              <div>
+                <h3>Location-Based Matching</h3>
+                <p>Get leads specifically from your service area.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">✓</div>
+              <div>
+                <h3>Pre-Qualified Clients</h3>
+                <p>All leads have been pre-screened for your services.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">🔔</div>
+              <div>
+                <h3>Real-Time Notifications</h3>
+                <p>Get alerts when new leads are available.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon">📈</div>
+              <div>
+                <h3>Business Growth</h3>
+                <p>Expand your client base with our subscription plans.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="login-form-container">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('login')">Login</button>
+            <button class="tab-btn" onclick="showTab('signup')">Sign Up</button>
+          </div>
+          
+          <div class="tab-content" id="login-tab">
+            <form action="#" method="POST" class="login-form">
+              <h3>Welcome Back</h3>
+              
+              <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" required placeholder="Your email">
+              </div>
+              
+              <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" required placeholder="Your password">
+              </div>
+              
+              <div class="form-options">
+                <div class="remember-me">
+                  <input type="checkbox" id="remember" name="remember">
+                  <label for="remember">Remember me</label>
+                </div>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+              </div>
+              
+              <button type="submit" class="btn btn-primary full-width">Login</button>
+            </form>
+          </div>
+          
+          <div class="tab-content hidden" id="signup-tab">
+            <form action="#" method="POST" class="signup-form">
+              <h3>Create an Account</h3>
+              
+              <div class="form-group">
+                <label for="company-name">Agency/Company Name</label>
+                <input type="text" id="company-name" name="company_name" required placeholder="Your company name">
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-name">Contact Name</label>
+                <input type="text" id="contact-name" name="contact_name" required placeholder="Your full name">
+              </div>
+              
+              <div class="form-group">
+                <label for="signup-email">Email</label>
+                <input type="email" id="signup-email" name="email" required placeholder="Your business email">
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" required placeholder="Business phone number">
+              </div>
+              
+              <div class="form-group">
+                <label for="service-area">Service Area (Zip Codes)</label>
+                <input type="text" id="service-area" name="service_area" required placeholder="E.g., 12345, 67890">
+              </div>
+              
+              <div class="form-group">
+                <label for="service-type">Service Type</label>
+                <select id="service-type" name="service_type" required>
+                  <option value="">Select service type</option>
+                  <option value="companion">Companion Care</option>
+                  <option value="skilled">Skilled Nursing</option>
+                  <option value="hospice">Hospice</option>
+                  <option value="multiple">Multiple Services</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="signup-password">Create Password</label>
+                <input type="password" id="signup-password" name="password" required placeholder="Create a secure password">
+              </div>
+              
+              <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" required placeholder="Confirm your password">
+              </div>
+              
+              <div class="terms-agreement">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a></label>
+              </div>
+              
+              <button type="submit" class="btn btn-primary full-width">Create Account</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscription Plans Section -->
+  <section class="subscription-plans">
+    <div class="container">
+      <h2 class="text-center">Subscription Plans</h2>
+      <p class="subtitle text-center">Choose the plan that fits your business needs</p>
+      
+      <div class="plans-container">
+        <div class="plan-card">
+          <div class="plan-header">
+            <h3>Basic</h3>
+            <div class="plan-price">
+              <span class="price">$300</span>
+              <span class="period">/month</span>
+            </div>
+            <p class="price-detail">$30 per lead</p>
+          </div>
+          
+          <div class="plan-features">
+            <ul>
+              <li><span class="check-icon">✓</span> 10 leads per month</li>
+              <li><span class="check-icon">✓</span> Email notifications</li>
+              <li><span class="check-icon">✓</span> Basic dashboard access</li>
+              <li><span class="check-icon">✓</span> 24/7 lead claiming</li>
+            </ul>
+          </div>
+          
+          <div class="plan-footer">
+            <a href="#" class="btn btn-outline">Select Plan</a>
+          </div>
+        </div>
+        
+        <div class="plan-card featured">
+          <div class="plan-tag">Most Popular</div>
+          <div class="plan-header">
+            <h3>Professional</h3>
+            <div class="plan-price">
+              <span class="price">$480</span>
+              <span class="period">/month</span>
+            </div>
+            <p class="price-detail">$24 per lead</p>
+          </div>
+          
+          <div class="plan-features">
+            <ul>
+              <li><span class="check-icon">✓</span> 20 leads per month</li>
+              <li><span class="check-icon">✓</span> Email & SMS notifications</li>
+              <li><span class="check-icon">✓</span> Advanced dashboard access</li>
+              <li><span class="check-icon">✓</span> Priority lead claiming</li>
+              <li><span class="check-icon">✓</span> Monthly performance report</li>
+            </ul>
+          </div>
+          
+          <div class="plan-footer">
+            <a href="#" class="btn btn-primary">Select Plan</a>
+          </div>
+        </div>
+        
+        <div class="plan-card">
+          <div class="plan-header">
+            <h3>Premium</h3>
+            <div class="plan-price">
+              <span class="price">$540</span>
+              <span class="period">/month</span>
+            </div>
+            <p class="price-detail">$18 per lead</p>
+          </div>
+          
+          <div class="plan-features">
+            <ul>
+              <li><span class="check-icon">✓</span> 30 leads per month</li>
+              <li><span class="check-icon">✓</span> Premium notifications</li>
+              <li><span class="check-icon">✓</span> Full dashboard access</li>
+              <li><span class="check-icon">✓</span> VIP lead claiming</li>
+              <li><span class="check-icon">✓</span> Dedicated account manager</li>
+              <li><span class="check-icon">✓</span> Marketing consultation</li>
+            </ul>
+          </div>
+          
+          <div class="plan-footer">
+            <a href="#" class="btn btn-outline">Select Plan</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="text-center">What Our Providers Say</h2>
+      
+      <div class="testimonials-container">
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <p>"Caring for Pops has transformed our client acquisition process. The leads are high-quality and we've seen a significant increase in conversions."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-info">
+              <h4>Sarah Johnson</h4>
+              <p>Alliance Home Health</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <p>"The platform is easy to use and the leads are already pre-qualified. It's helped us grow our business by 30% in just six months."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-info">
+              <h4>Michael Rodriguez</h4>
+              <p>Comfort Care Services</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial">
+          <div class="testimonial-content">
+            <p>"As a smaller agency, finding quality leads was always challenging. Caring for Pops levels the playing field and connects us with clients we'd never reach otherwise."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-info">
+              <h4>Lisa Chen</h4>
+              <p>Family First Care</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Caring for Pops</h3>
+          <p>Connecting Hearts to Home Health Care</p>
+          <div class="social-icons">
+            <a href="#">T</a>
+            <a href="#">F</a>
+            <a href="#">I</a>
+          </div>
+        </div>
+        
+        <div class="footer-section">
+          <h3>For Clients</h3>
+          <ul class="footer-links">
+            <li><a href="#">How It Works</a></li>
+            <li><a href="#">Find Care Providers</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Client Reviews</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>For Providers</h3>
+          <ul class="footer-links">
+            <li><a href="#">Join Our Network</a></li>
+            <li><a href="#">Subscription Plans</a></li>
+            <li><a href="#">Provider Resources</a></li>
+            <li><a href="#">Success Stories</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Company</h3>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms and Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        <p>&copy; 2025 Caring for Pops. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Tab switching functionality
+    function showTab(tabId) {
+      // Hide all tabs
+      document.getElementById('login-tab').classList.add('hidden');
+      document.getElementById('signup-tab').classList.add('hidden');
+      
+      // Show the selected tab
+      document.getElementById(tabId + '-tab').classList.remove('hidden');
+      
+      // Update active button
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      // Get the clicked button
+      const activeButton = Array.from(buttons).find(btn => btn.innerText.toLowerCase() === tabId);
+      if (activeButton) {
+        activeButton.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
