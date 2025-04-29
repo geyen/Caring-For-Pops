@@ -1,0 +1,24 @@
+{
+  "name": "caring-for-pops",
+  "version": "1.0.0",
+  "description": "Caring for Pops - Home Health Care Lead Generation Platform",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "fs": "^0.0.1-security",
+    "twilio": "^4.18.0",
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "Caring for Pops",
+  "license": "ISC"
+}
