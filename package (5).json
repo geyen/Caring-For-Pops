@@ -1,0 +1,19 @@
+{
+  "name": "caring-for-pops",
+  "version": "1.0.0",
+  "description": "A global home health care lead generation platform connecting care seekers with trusted providers.",
+  "main": "app.cjs",
+  "scripts": {
+    "start": "node ../app.cjs",
+    "dev": "nodemon ../app.cjs"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
