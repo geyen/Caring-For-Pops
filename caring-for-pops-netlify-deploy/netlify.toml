@@ -1,0 +1,64 @@
+# Netlify configuration file
+# This file specifies build settings and redirects for your Netlify deployment
+
+[build]
+  # Settings for static site deployment
+  publish = "public"  # Publish the public directory containing all HTML/CSS/JS files
+  command = ""  # No build command needed for a pre-built static site
+
+# Environment variables that will be set for all deploys
+[build.environment]
+  NODE_VERSION = "18"  # Set Node.js version for the build
+
+# Production context: all deploys from the main branch
+# Set a higher build priority
+[context.production]
+  # You can override settings for production if needed
+  # For example, different environment variables
+  [context.production.environment]
+    NODE_ENV = "production"
+
+# Deploy Preview context: previews of PRs
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    NODE_ENV = "staging"
+
+# Branch Deploy context: all branch deploys that aren't the main branch
+[context.branch-deploy]
+  [context.branch-deploy.environment]
+    NODE_ENV = "staging"
+
+# Redirects
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Headers to set for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Content-Security-Policy = "default-src 'self'"
+
+# Enable asset optimization
+[build.processing]
+  skip_processing = false
+[build.processing.css]
+  bundle = true
+  minify = true
+[build.processing.js]
+  bundle = true
+  minify = true
+[build.processing.images]
+  compress = true
+
+# You can customize the 404 page
+# [[redirects]]
+#   from = "/*"
+#   to = "/404/index.html"
+#   status = 404

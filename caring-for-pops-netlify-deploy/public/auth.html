@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login or Register - Provider Portal | Caring For Pops</title>
+  <meta name="description" content="Access the Caring for Pops provider portal. Login to manage your exclusive leads or register to join our network of trusted home healthcare providers.">
+  <meta name="keywords" content="home healthcare provider login, care provider registration, healthcare lead management, provider portal">
+  <meta name="author" content="Caring For Pops">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://caringforpops.com/auth">
+  <meta property="og:title" content="Login or Register - Provider Portal | Caring For Pops">
+  <meta property="og:description" content="Access the Caring for Pops provider portal. Login to manage your exclusive leads or register to join our network of trusted home healthcare providers.">
+  <meta property="og:image" content="/images/social-sharing-auth.jpg">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://caringforpops.com/auth">
+  <meta property="twitter:title" content="Login or Register - Provider Portal | Caring For Pops">
+  <meta property="twitter:description" content="Access the Caring for Pops provider portal. Login to manage your exclusive leads or register to join our network of trusted home healthcare providers.">
+  <meta property="twitter:image" content="/images/social-sharing-auth.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    .auth-form-side {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .auth-hero-side {
+      background-color: var(--primary);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .auth-hero-side::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(rgba(0, 118, 108, 0.9), rgba(0, 118, 108, 0.7)), url('/images/auth-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+    
+    .auth-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .auth-logo {
+      margin-bottom: 1rem;
+      max-width: 150px;
+    }
+    
+    .auth-logo img {
+      width: 100%;
+    }
+    
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    
+    .auth-tab {
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      color: var(--neutral);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all var(--transition-fast);
+    }
+    
+    .auth-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    
+    .auth-form-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .auth-form {
+      display: none;
+    }
+    
+    .auth-form.active {
+      display: block;
+    }
+    
+    .form-message {
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    
+    .form-message.error {
+      background-color: rgba(244, 67, 54, 0.1);
+      color: var(--error);
+      display: block;
+    }
+    
+    .form-message.success {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: var(--success);
+      display: block;
+    }
+    
+    .form-footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--neutral);
+    }
+    
+    .form-footer a {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .forgot-password {
+      font-size: 0.875rem;
+      color: var(--primary);
+    }
+    
+    .auth-hero-title {
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .auth-hero-desc {
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .auth-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .auth-feature-icon {
+      background: rgba(255, 255, 255, 0.2);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .auth-feature-content h3 {
+      color: var(--white);
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .auth-feature-content p {
+      font-size: 0.925rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+    
+    .back-to-site {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1;
+      opacity: 0.9;
+      transition: opacity var(--transition-fast);
+    }
+    
+    .back-to-site:hover {
+      opacity: 1;
+    }
+    
+    @media (max-width: 992px) {
+      .auth-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .auth-hero-side {
+        display: none;
+      }
+    }
+    
+    /* Form error styles */
+    .error-message {
+      color: var(--error);
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    
+    input.error, select.error, textarea.error {
+      border-color: var(--error);
+    }
+  </style>
+</head>
+<body>
+  <main class="auth-container">
+    <div class="auth-form-side">
+      <div class="auth-form-container">
+        <div class="auth-logo">
+          <a href="/">
+            <img src="/images/logo.svg" alt="Caring For Pops Logo">
+          </a>
+        </div>
+        
+        <div class="auth-tabs">
+          <div class="auth-tab active" data-tab="login">Login</div>
+          <div class="auth-tab" data-tab="register">Register</div>
+        </div>
+        
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form active">
+          <div class="form-message" id="loginMessage"></div>
+          
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" name="email" required placeholder="Your email address">
+          </div>
+          
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" required placeholder="Your password">
+          </div>
+          
+          <div class="remember-forgot">
+            <label class="checkbox">
+              <input type="checkbox" name="remember">
+              <span>Remember me</span>
+            </label>
+            
+            <a href="#" class="forgot-password">Forgot Password?</a>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-full">Log In</button>
+          
+          <div class="form-footer">
+            <p>Don't have an account? <a href="#" class="switch-form" data-target="register">Sign up now</a></p>
+          </div>
+        </form>
+        
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form">
+          <div class="form-message" id="registerMessage"></div>
+          
+          <div class="form-group">
+            <label for="registerName">Full Name</label>
+            <input type="text" id="registerName" name="name" required placeholder="Your full name">
+          </div>
+          
+          <div class="form-group">
+            <label for="registerCompany">Company/Agency Name</label>
+            <input type="text" id="registerCompany" name="company" required placeholder="Your company or agency name">
+          </div>
+          
+          <div class="form-group">
+            <label for="registerEmail">Email Address</label>
+            <input type="email" id="registerEmail" name="email" required placeholder="Your email address">
+          </div>
+          
+          <div class="form-group">
+            <label for="registerPhone">Phone Number</label>
+            <input type="tel" id="registerPhone" name="phone" required placeholder="Your phone number">
+          </div>
+          
+          <div class="form-group">
+            <label for="registerPassword">Password</label>
+            <input type="password" id="registerPassword" name="password" required placeholder="Create a password" minlength="8">
+          </div>
+          
+          <div class="form-group">
+            <label for="registerPasswordConfirm">Confirm Password</label>
+            <input type="password" id="registerPasswordConfirm" name="passwordConfirm" required placeholder="Confirm your password" minlength="8">
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox">
+              <input type="checkbox" name="terms" required>
+              <span>I agree to the <a href="/terms">Terms and Conditions</a> and <a href="/privacy">Privacy Policy</a></span>
+            </label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+          
+          <div class="form-footer">
+            <p>Already have an account? <a href="#" class="switch-form" data-target="login">Log in now</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="auth-hero-side">
+      <a href="/" class="back-to-site">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/>
+        </svg>
+        Back to Home
+      </a>
+      
+      <div class="auth-hero-content">
+        <h1 class="auth-hero-title">Welcome to Caring for Pops Provider Portal</h1>
+        <p class="auth-hero-desc">Join our network of trusted home care providers and gain access to high-quality, exclusive client leads.</p>
+        
+        <div class="auth-features">
+          <div class="auth-feature">
+            <div class="auth-feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="auth-feature-content">
+              <h3>Exclusive Leads</h3>
+              <p>When you claim a lead, it's exclusively yours - no competing with multiple agencies for the same client.</p>
+            </div>
+          </div>
+          
+          <div class="auth-feature">
+            <div class="auth-feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="auth-feature-content">
+              <h3>Flexible Subscription Plans</h3>
+              <p>Choose from various subscription options that fit your business size and growth goals.</p>
+            </div>
+          </div>
+          
+          <div class="auth-feature">
+            <div class="auth-feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="auth-feature-content">
+              <h3>Real-Time Notifications</h3>
+              <p>Get instant notifications when new leads match your service area and capabilities.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab Switching
+      const authTabs = document.querySelectorAll('.auth-tab');
+      const authForms = document.querySelectorAll('.auth-form');
+      
+      authTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs and forms
+          authTabs.forEach(t => t.classList.remove('active'));
+          authForms.forEach(f => f.classList.remove('active'));
+          
+          // Add active class to clicked tab and corresponding form
+          tab.classList.add('active');
+          const targetForm = document.getElementById(tab.getAttribute('data-tab') + 'Form');
+          if (targetForm) {
+            targetForm.classList.add('active');
+          }
+        });
+      });
+      
+      // Switch form links
+      document.querySelectorAll('.switch-form').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          const targetTab = document.querySelector(`.auth-tab[data-tab="${link.getAttribute('data-target')}"]`);
+          if (targetTab) {
+            targetTab.click();
+          }
+        });
+      });
+      
+      // Login Form Submission
+      const loginForm = document.getElementById('loginForm');
+      const loginMessage = document.getElementById('loginMessage');
+      
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+          
+          // Validate email and password
+          if (!email || !password) {
+            showMessage(loginMessage, 'error', 'Please enter your email and password.');
+            return;
+          }
+          
+          // In a real application, this would be an API call
+          // For now, we're simulating a successful login
+          console.log('Login attempted with:', { email });
+          
+          // Redirect to provider dashboard
+          // window.location.href = '/dashboard';
+          
+          // For now, show a success message
+          showMessage(loginMessage, 'success', 'Login successful! Redirecting to dashboard...');
+          
+          // Simulate redirect delay
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000);
+        });
+      }
+      
+      // Register Form Submission
+      const registerForm = document.getElementById('registerForm');
+      const registerMessage = document.getElementById('registerMessage');
+      
+      if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const name = document.getElementById('registerName').value;
+          const company = document.getElementById('registerCompany').value;
+          const email = document.getElementById('registerEmail').value;
+          const phone = document.getElementById('registerPhone').value;
+          const password = document.getElementById('registerPassword').value;
+          const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+          const termsChecked = registerForm.querySelector('input[name="terms"]').checked;
+          
+          // Validate inputs
+          if (!name || !company || !email || !phone || !password) {
+            showMessage(registerMessage, 'error', 'Please fill in all required fields.');
+            return;
+          }
+          
+          if (password !== passwordConfirm) {
+            showMessage(registerMessage, 'error', 'Passwords do not match.');
+            return;
+          }
+          
+          if (!termsChecked) {
+            showMessage(registerMessage, 'error', 'You must agree to the Terms and Conditions.');
+            return;
+          }
+          
+          // In a real application, this would be an API call
+          // For now, we're simulating a successful registration
+          console.log('Registration attempted with:', { name, company, email, phone });
+          
+          // Show success message
+          showMessage(registerMessage, 'success', 'Registration successful! Please check your email to verify your account.');
+          
+          // Reset form
+          registerForm.reset();
+          
+          // Switch to login tab after a delay
+          setTimeout(() => {
+            document.querySelector('.auth-tab[data-tab="login"]').click();
+          }, 3000);
+        });
+      }
+      
+      // Show form message
+      function showMessage(element, type, message) {
+        element.textContent = message;
+        element.className = `form-message ${type}`;
+        
+        // Hide message after a delay if it's a success message
+        if (type === 'success') {
+          setTimeout(() => {
+            element.className = 'form-message';
+          }, 5000);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
