@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions | Caring For Pops</title>
+  <meta name="description" content="Find answers to common questions about our home health care matching service for both families seeking care and providers looking to grow their business.">
+  <meta name="keywords" content="home healthcare FAQ, care provider questions, family caregiver questions, healthcare matching, senior care FAQ">
+  <meta name="author" content="Caring For Pops">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://caringforpops.com/faq">
+  <meta property="og:title" content="Frequently Asked Questions | Caring For Pops">
+  <meta property="og:description" content="Find answers to common questions about our home health care matching service for both families and providers.">
+  <meta property="og:image" content="/images/social-sharing-faq.jpg">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://caringforpops.com/faq">
+  <meta property="twitter:title" content="Frequently Asked Questions | Caring For Pops">
+  <meta property="twitter:description" content="Find answers to common questions about our home health care matching service for both families and providers.">
+  <meta property="twitter:image" content="/images/social-sharing-faq.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Structured Data - FAQ Page -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does your matching process work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our matching process is designed to be simple, efficient, and highly personalized: 1) Information Gathering: You fill out our care request form with details about your loved one's needs, care preferences, and location. 2) Provider Matching: We analyze your needs and match you with a single, quality provider in your area who can best meet those specific requirements. 3) Connection: Your information is shared only with the matched provider, who will contact you directly to discuss care options and next steps. 4) Care Arrangement: You work directly with the provider to arrange care services, schedules, and any other details. We focus on quality over quantity, meaning we don't overwhelm you with multiple options. Instead, we carefully select the provider that's best suited to your unique situation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is your service free for families seeking care?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, our matching service is completely free for families seeking care. There are never any fees or charges for using our platform to find a home health care provider. Our business model works by charging providers a subscription fee to be part of our network and receive exclusive leads. This allows us to offer our matching service to families at no cost while maintaining the highest quality of provider matches."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does your exclusive lead model work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our exclusive lead model is designed to maximize your conversion rates and provide the best possible return on investment: 1) One Provider Per Lead: When a family submits a care request, we match them with only one provider in their area. This means you're not competing with multiple agencies for the same client. 2) Quality Over Quantity: We focus on providing you with high-quality, pre-qualified leads that match your service capabilities and geographic coverage. 3) Lead Ownership: Once you claim a lead, it's exclusively yours to follow up with. No other provider will receive that same lead information. 4) Higher Conversion Rates: Providers on our platform report significantly higher conversion rates compared to traditional lead generation services."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the subscription plan options and costs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer three subscription plans designed to fit the needs of different provider businesses: 1) Basic Plan: $300/month for 10 leads per month. 2) Growth Plan: $480/month for 20 leads per month. 3) Elite Plan: $600/month for 30 leads per month. All plans include exclusive leads in your service area, access to our provider dashboard, and standard support services. Higher-tier plans offer additional benefits such as priority lead access, enhanced profile features, and premium support options."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    .faq-hero {
+      text-align: center;
+      padding: 120px 0 60px;
+      background-color: var(--background);
+    }
+    
+    .faq-hero h1 {
+      margin-bottom: 20px;
+    }
+    
+    .faq-hero p {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      color: var(--neutral);
+    }
+    
+    .faq-section {
+      padding: 80px 0;
+    }
+    
+    .faq-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .faq-tab {
+      padding: 12px 24px;
+      font-weight: 600;
+      color: var(--neutral);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-tab.active {
+      color: var(--primary);
+    }
+    
+    .faq-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--primary);
+    }
+    
+    .faq-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .faq-category {
+      display: none;
+    }
+    
+    .faq-category.active {
+      display: block;
+    }
+    
+    .faq-item {
+      margin-bottom: 20px;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    
+    .faq-question {
+      padding: 20px;
+      background-color: var(--white);
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-question:hover {
+      background-color: var(--background);
+    }
+    
+    .faq-question .icon {
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-item.active .faq-question {
+      color: var(--primary);
+    }
+    
+    .faq-item.active .faq-question .icon {
+      transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 1000px;
+    }
+    
+    .faq-answer-content {
+      padding: 0 20px 20px;
+      line-height: 1.6;
+    }
+    
+    .faq-answer-content p {
+      margin-bottom: 15px;
+    }
+    
+    .faq-answer-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .faq-answer-content ul {
+      margin-bottom: 15px;
+      padding-left: 20px;
+    }
+    
+    .faq-answer-content ul li {
+      margin-bottom: 8px;
+    }
+    
+    .faq-answer-content a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    
+    .faq-cta {
+      text-align: center;
+      padding: 60px 0;
+      background-color: var(--background);
+    }
+    
+    .faq-cta-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .faq-cta h2 {
+      margin-bottom: 20px;
+    }
+    
+    .faq-cta p {
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .faq-tabs {
+        flex-wrap: wrap;
+      }
+      
+      .faq-tab {
+        padding: 10px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.svg" alt="Caring For Pops Logo">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/providers">For Providers</a></li>
+          <li><a href="/faq" class="active">FAQs</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/auth" class="nav-button">Login</a></li>
+        </ul>
+      </nav>
+      <button class="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="faq-hero">
+      <div class="container">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about our home health care matching service for both families and providers.</p>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <div class="container">
+        <div class="faq-tabs">
+          <div class="faq-tab active" data-target="families">For Families</div>
+          <div class="faq-tab" data-target="providers">For Providers</div>
+          <div class="faq-tab" data-target="general">General</div>
+        </div>
+        
+        <div class="faq-content">
+          <!-- Families FAQs -->
+          <div class="faq-category active" id="families">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How does your matching process work?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Our matching process is designed to be simple, efficient, and highly personalized:</p>
+                  <ol>
+                    <li><strong>Information Gathering:</strong> You fill out our care request form with details about your loved one's needs, care preferences, and location.</li>
+                    <li><strong>Provider Matching:</strong> We analyze your needs and match you with a single, quality provider in your area who can best meet those specific requirements.</li>
+                    <li><strong>Connection:</strong> Your information is shared only with the matched provider, who will contact you directly to discuss care options and next steps.</li>
+                    <li><strong>Care Arrangement:</strong> You work directly with the provider to arrange care services, schedules, and any other details.</li>
+                  </ol>
+                  <p>We focus on quality over quantity, meaning we don't overwhelm you with multiple options. Instead, we carefully select the provider that's best suited to your unique situation.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Is your service free for families seeking care?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Yes, our matching service is completely free for families seeking care. There are never any fees or charges for using our platform to find a home health care provider.</p>
+                  <p>Our business model works by charging providers a subscription fee to be part of our network and receive exclusive leads. This allows us to offer our matching service to families at no cost while maintaining the highest quality of provider matches.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What types of care providers do you work with?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>We work with a diverse range of licensed and reputable home health care providers, including:</p>
+                  <ul>
+                    <li>Home health care agencies</li>
+                    <li>Non-medical home care services</li>
+                    <li>Specialized care providers (dementia, Alzheimer's, etc.)</li>
+                    <li>Skilled nursing services</li>
+                    <li>Hospice and palliative care organizations</li>
+                    <li>Respite care services</li>
+                  </ul>
+                  <p>All providers in our network undergo a thorough vetting process to ensure they maintain the necessary licenses, insurance, and quality standards to deliver exceptional care.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How quickly will I be contacted after submitting my care request?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>In most cases, you can expect to be contacted by a matched provider within 24-48 hours after submitting your care request. Many providers respond even sooner, especially for urgent care needs.</p>
+                  <p>If you've indicated an immediate need for care in your request, we prioritize your matching process to ensure the quickest possible response. For future planning requests, the timeline may be slightly longer, but you'll still receive a prompt response.</p>
+                  <p>If you haven't been contacted within 48 hours, please reach out to our support team, and we'll follow up on your behalf.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What if I'm not satisfied with the provider I'm matched with?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Our primary goal is to ensure you find the right care provider for your needs. If you're not completely satisfied with your initial match, please let us know as soon as possible.</p>
+                  <p>We'll work with you to understand what aspects of the match didn't meet your expectations and will find an alternative provider that better aligns with your requirements. Your feedback helps us refine our matching process and improve the experience for all families.</p>
+                  <p>Simply contact our support team, and we'll assist you with finding a more suitable match at no additional cost.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Providers FAQs -->
+          <div class="faq-category" id="providers">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How does your exclusive lead model work?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Our exclusive lead model is designed to maximize your conversion rates and provide the best possible return on investment:</p>
+                  <ul>
+                    <li><strong>One Provider Per Lead:</strong> When a family submits a care request, we match them with only one provider in their area. This means you're not competing with multiple agencies for the same client.</li>
+                    <li><strong>Quality Over Quantity:</strong> We focus on providing you with high-quality, pre-qualified leads that match your service capabilities and geographic coverage.</li>
+                    <li><strong>Lead Ownership:</strong> Once you claim a lead, it's exclusively yours to follow up with. No other provider will receive that same lead information.</li>
+                    <li><strong>Higher Conversion Rates:</strong> Providers on our platform report significantly higher conversion rates compared to traditional lead generation services where multiple agencies receive the same leads.</li>
+                  </ul>
+                  <p>This approach benefits both providers and families: providers receive more valuable leads with higher closing potential, and families enjoy a more personalized, less overwhelming experience.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What are the subscription plan options and costs?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>We offer three subscription plans designed to fit the needs of different provider businesses:</p>
+                  <ul>
+                    <li><strong>Basic Plan:</strong> $300/month for 10 leads per month</li>
+                    <li><strong>Growth Plan:</strong> $480/month for 20 leads per month</li>
+                    <li><strong>Elite Plan:</strong> $600/month for 30 leads per month</li>
+                  </ul>
+                  <p>All plans include exclusive leads in your service area, access to our provider dashboard, and standard support services. Higher-tier plans offer additional benefits such as priority lead access, enhanced profile features, and premium support options.</p>
+                  <p>We also offer a 14-day free trial period for new providers, and you can change or cancel your plan at any time. For more detailed information, please visit our <a href="/providers#subscription-plans">Subscription Plans</a> page.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How are leads distributed among providers in the same area?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>We use a sophisticated matching algorithm to distribute leads fairly and effectively among providers in the same geographic area:</p>
+                  <ul>
+                    <li><strong>Service Alignment:</strong> The primary factor is how well your services align with the client's specific needs and preferences.</li>
+                    <li><strong>Subscription Level:</strong> Providers on higher-tier plans receive priority access to leads when multiple providers could potentially serve the same client.</li>
+                    <li><strong>Performance History:</strong> We consider your responsiveness and conversion history to ensure clients are matched with providers who provide timely, quality follow-up.</li>
+                    <li><strong>Lead Balance:</strong> We aim to distribute leads evenly among qualified providers to ensure all network members receive their allocated leads.</li>
+                  </ul>
+                  <p>Our goal is to create the best possible match for each family while ensuring a fair distribution of leads among our provider network members based on their subscription level and service quality.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What happens if I don't use all my allocated leads in a month?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>We understand that lead flow can vary from month to month. If you don't use all your allocated leads in a given month, our policy works as follows:</p>
+                  <ul>
+                    <li>Unused leads from your monthly allocation will roll over to the next month but must be used within 60 days of their original allocation date.</li>
+                    <li>The maximum number of rollover leads that can accumulate in your account is twice your monthly allocation (e.g., 20 leads for the Basic plan, 40 for Growth, 60 for Elite).</li>
+                    <li>You can view your current lead balance, including rollover leads, in your provider dashboard at any time.</li>
+                  </ul>
+                  <p>This flexible approach ensures you receive the full value of your subscription even during periods when lead volume might be lower in your area.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Can I purchase additional leads beyond my subscription?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Yes, you can purchase additional leads beyond your subscription allocation. We offer flexible options for providers who need extra leads:</p>
+                  <ul>
+                    <li>Additional leads can be purchased in packs of 5, 10, or 20.</li>
+                    <li>The per-lead cost for additional leads is slightly higher than your subscription rate but still offers excellent value.</li>
+                    <li>Additional lead packs can be purchased directly from your provider dashboard as needed.</li>
+                    <li>These extra leads never expire, so you can use them whenever you need them.</li>
+                  </ul>
+                  <p>If you consistently find yourself needing more leads than your current subscription provides, you might want to consider upgrading to a higher-tier plan, which offers a better per-lead value.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- General FAQs -->
+          <div class="faq-category" id="general">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How does Caring for Pops differ from other care matching services?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Caring for Pops stands apart from other care matching services in several key ways:</p>
+                  <ul>
+                    <li><strong>Exclusive Matching:</strong> We connect each family with only one provider, rather than sending their information to multiple agencies. This creates a more focused, less overwhelming experience for families and higher-quality leads for providers.</li>
+                    <li><strong>Personalized Approach:</strong> Our matching process goes beyond basic location and service type to consider factors like care philosophy, specialized needs, and personality fit.</li>
+                    <li><strong>Transparent Business Model:</strong> We offer clear, subscription-based pricing for providers with no hidden fees or unexpected charges, unlike platforms that charge per lead or take a percentage of service revenue.</li>
+                    <li><strong>Quality Over Quantity:</strong> We focus on creating meaningful connections rather than generating high volumes of low-quality leads.</li>
+                    <li><strong>Family-Centric:</strong> Our platform was built by people with personal experience navigating the challenges of finding quality care for loved ones.</li>
+                  </ul>
+                  <p>These differences reflect our commitment to transforming the care matching process for both families and providers by prioritizing quality, transparency, and personalization.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What geographic areas do you serve?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Caring for Pops currently serves families and providers across the United States, with our strongest presence in the following regions:</p>
+                  <ul>
+                    <li>Midwest (Minnesota, Wisconsin, Illinois, Michigan, Iowa)</li>
+                    <li>Northeast (New York, New Jersey, Pennsylvania, Massachusetts)</li>
+                    <li>Southeast (Florida, Georgia, North Carolina, Tennessee)</li>
+                    <li>West Coast (California, Washington, Oregon)</li>
+                    <li>Southwest (Texas, Arizona, Colorado)</li>
+                  </ul>
+                  <p>We're continuously expanding our network to ensure comprehensive coverage across all states. If you're a family seeking care or a provider interested in joining our network in an area not listed above, please contact us directly, as we may still be able to assist you.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How do you ensure the quality of care providers?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>We maintain high standards for all providers in our network through a comprehensive vetting process:</p>
+                  <ul>
+                    <li><strong>Verification of Licenses:</strong> We verify that all providers maintain required state licenses and certifications for their care services.</li>
+                    <li><strong>Insurance Coverage:</strong> Providers must demonstrate appropriate liability insurance coverage.</li>
+                    <li><strong>Background Checks:</strong> We confirm that providers conduct thorough background checks on all caregiving staff.</li>
+                    <li><strong>Business Standing:</strong> We review business documentation, years in operation, and reputation in the community.</li>
+                    <li><strong>Client Feedback:</strong> We collect and monitor feedback from families matched with providers.</li>
+                    <li><strong>Ongoing Monitoring:</strong> We continuously evaluate provider performance based on responsiveness, client satisfaction, and professional conduct.</li>
+                  </ul>
+                  <p>Providers that fail to maintain our quality standards are removed from our network. This rigorous approach ensures families can feel confident in the providers we match them with.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What types of payment do you accept?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>For provider subscriptions and additional lead purchases, we accept the following payment methods:</p>
+                  <ul>
+                    <li>All major credit cards (Visa, Mastercard, American Express, Discover)</li>
+                    <li>ACH bank transfers</li>
+                    <li>PayPal</li>
+                  </ul>
+                  <p>Subscription payments are processed automatically on a monthly basis, with the option to pay annually for a discount. You can update your payment information at any time through your provider dashboard.</p>
+                  <p>For families seeking care, our matching service is completely free. You'll never be charged for using Caring for Pops to find a care provider.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How do you protect personal information?</span>
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  <p>Protecting your personal information is a top priority at Caring for Pops. Our comprehensive data protection measures include:</p>
+                  <ul>
+                    <li><strong>Secure Infrastructure:</strong> We use industry-standard encryption and secure server infrastructure to protect all data transmitted through our platform.</li>
+                    <li><strong>Limited Data Sharing:</strong> Family information is only shared with the single provider they are matched with, never with multiple providers or third parties.</li>
+                    <li><strong>Privacy Policy:</strong> Our detailed privacy policy outlines exactly how we collect, use, and protect your information.</li>
+                    <li><strong>Compliance:</strong> We adhere to all applicable privacy laws and regulations, including HIPAA requirements for health information.</li>
+                    <li><strong>Data Minimization:</strong> We only collect information that is necessary to facilitate quality care matches.</li>
+                    <li><strong>Provider Agreements:</strong> All providers in our network agree to strict confidentiality requirements regarding client information.</li>
+                  </ul>
+                  <p>For more detailed information, please review our <a href="/privacy">Privacy Policy</a>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-cta">
+      <div class="container">
+        <div class="faq-cta-container">
+          <h2>Still have questions?</h2>
+          <p>If you couldn't find the answer you were looking for, our friendly support team is here to help.</p>
+          <div class="cta-buttons">
+            <a href="/about#contact" class="btn btn-primary">Contact Us</a>
+            <a href="/" class="btn btn-outline">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="/images/logo-white.svg" alt="Caring For Pops Logo">
+          <p>Connecting Hearts to Home Health Care</p>
+          <p>Caring for Pops is not a care provider, we're a care connector.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h3>For Clients</h3>
+            <ul>
+              <li><a href="/#how-it-works">How It Works</a></li>
+              <li><a href="/#care-form">Find Care Providers</a></li>
+              <li><a href="/faq">FAQs</a></li>
+              <li><a href="/resources">Resources</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>For Providers</h3>
+            <ul>
+              <li><a href="/providers">Join Our Network</a></li>
+              <li><a href="/providers#subscription-plans">Subscription Plans</a></li>
+              <li><a href="/provider-resources">Provider Resources</a></li>
+              <li><a href="/provider-faq">Provider FAQs</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/about#contact">Contact</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms and Conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Caring For Pops. All rights reserved.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.053 10.053 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    // FAQ Tabs
+    const faqTabs = document.querySelectorAll('.faq-tab');
+    const faqCategories = document.querySelectorAll('.faq-category');
+    
+    faqTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        faqTabs.forEach(t => t.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Hide all categories
+        faqCategories.forEach(cat => cat.classList.remove('active'));
+        
+        // Show the corresponding category
+        const targetCategory = document.getElementById(tab.getAttribute('data-target'));
+        targetCategory.classList.add('active');
+      });
+    });
+    
+    // FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      
+      question.addEventListener('click', () => {
+        // Check if current item is active
+        const isActive = item.classList.contains('active');
+        
+        // Close all items
+        faqItems.forEach(i => i.classList.remove('active'));
+        
+        // If clicked item wasn't active, open it
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+    
+    // Mobile Menu Toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.main-nav').classList.toggle('active');
+      this.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
