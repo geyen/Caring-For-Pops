@@ -1,0 +1,16 @@
+{
+  "name": "caring-for-pops-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for Caring for Pops",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.6.0",
+    "@sendgrid/mail": "^7.7.0",
+    "bcrypt": "^5.1.1",
+    "connect-pg-simple": "^9.0.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.28.6",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3"
+  }
+}
