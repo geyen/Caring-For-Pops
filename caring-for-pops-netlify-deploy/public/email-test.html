@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caring for Pops - Email Test</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #4f46e5 0%, #7e22ce 100%);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto px-4 py-12">
+    <header class="mb-10 text-center">
+      <h1 class="text-3xl font-bold text-indigo-900">Caring for Pops</h1>
+      <h2 class="text-xl text-purple-700">SendGrid Email Test Tool</h2>
+    </header>
+
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+      <div class="gradient-bg p-4 text-white">
+        <h3 class="text-lg font-semibold">Test Your Email Configuration</h3>
+        <p class="text-sm opacity-80">SendGrid + Netlify Integration Test</p>
+      </div>
+      
+      <div class="p-6">
+        <form id="emailTestForm" class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Recipient Email</label>
+            <input type="email" id="email" name="email" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          
+          <div>
+            <label for="subject" class="block text-sm font-medium text-gray-700">Subject (Optional)</label>
+            <input type="text" id="subject" name="subject" placeholder="Caring for Pops - Test Email"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          </div>
+          
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700">Message (Optional)</label>
+            <textarea id="message" name="message" rows="3" placeholder="This is a test email from Caring for Pops."
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+          </div>
+          
+          <div>
+            <button type="submit" 
+              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white gradient-bg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              Send Test Email
+            </button>
+          </div>
+        </form>
+        
+        <div id="resultContainer" class="mt-6 hidden">
+          <div class="p-4 rounded-md">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg id="successIcon" class="h-5 w-5 text-green-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <svg id="errorIcon" class="h-5 w-5 text-red-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 id="resultTitle" class="text-sm font-medium"></h3>
+                <div id="resultMessage" class="mt-2 text-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="mt-10 text-center text-sm text-gray-500">
+      <p>© 2025 Caring for Pops. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('emailTestForm');
+      const resultContainer = document.getElementById('resultContainer');
+      const successIcon = document.getElementById('successIcon');
+      const errorIcon = document.getElementById('errorIcon');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultMessage = document.getElementById('resultMessage');
+      
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        // Reset UI
+        resultContainer.classList.add('hidden');
+        
+        try {
+          const response = await fetch('/.netlify/functions/send-test-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, subject, message }),
+          });
+          
+          const data = await response.json();
+          
+          // Show result
+          resultContainer.classList.remove('hidden');
+          
+          if (response.ok && data.success) {
+            // Success state
+            resultContainer.classList.add('bg-green-50');
+            resultContainer.classList.remove('bg-red-50');
+            successIcon.classList.remove('hidden');
+            errorIcon.classList.add('hidden');
+            resultTitle.classList.add('text-green-800');
+            resultTitle.classList.remove('text-red-800');
+            resultTitle.textContent = 'Success!';
+            resultMessage.innerHTML = `Email sent successfully to <strong>${data.recipient}</strong>. Please check your inbox (or spam folder).`;
+          } else {
+            // Error state
+            resultContainer.classList.add('bg-red-50');
+            resultContainer.classList.remove('bg-green-50');
+            errorIcon.classList.remove('hidden');
+            successIcon.classList.add('hidden');
+            resultTitle.classList.add('text-red-800');
+            resultTitle.classList.remove('text-green-800');
+            resultTitle.textContent = 'Error';
+            resultMessage.innerHTML = `Failed to send email: ${data.message || 'Unknown error'}`;
+            
+            if (data.details) {
+              resultMessage.innerHTML += `<br><small>${data.details}</small>`;
+            }
+          }
+        } catch (error) {
+          // Network error
+          resultContainer.classList.remove('hidden');
+          resultContainer.classList.add('bg-red-50');
+          resultContainer.classList.remove('bg-green-50');
+          errorIcon.classList.remove('hidden');
+          successIcon.classList.add('hidden');
+          resultTitle.classList.add('text-red-800');
+          resultTitle.classList.remove('text-green-800');
+          resultTitle.textContent = 'Error';
+          resultMessage.textContent = `Network error: ${error.message}`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
