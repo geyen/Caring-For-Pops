@@ -10,7 +10,6 @@
 # Environment variables that will be set for all deploys
 [build.environment]
   NODE_VERSION = "18"  # Set Node.js version for the build
-  GO_VERSION = "skip"  # Skip Go installation
 
 # Production context: all deploys from the main branch
 # Set a higher build priority
