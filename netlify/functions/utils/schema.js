@@ -1,13 +1,34 @@
 // netlify/functions/utils/schema.js
 
 const users = {
-  id: 'uuid',
-  email: 'string',
-  username: 'string',
-  password: 'string',
-  created_at: 'date',
+  tableName: 'users',
+  columns: [
+    'id',
+    'username',
+    'password',
+    'email',
+    'fullName',
+    'companyName',
+    'phoneNumber',
+    'subscriptionLevel',
+    'referredBy',
+    'isAdmin',
+    'createdAt'
+  ]
+};
+
+const referrals = {
+  tableName: 'referrals',
+  columns: [
+    'id',
+    'referrerId',
+    'referredId',
+    'status',
+    'createdAt'
+  ]
 };
 
 module.exports = {
-  users
+  users,
+  referrals
 };
