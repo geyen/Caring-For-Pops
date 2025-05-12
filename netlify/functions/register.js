@@ -1,6 +1,6 @@
-const { hashPassword, generateToken, getUserByUsername } = require('./auth');
-const { getDb } = require('./db');
-const { users, referrals } = require('./schema');
+const { hashPassword, generateToken, getUserByUsername } = require('./utils/auth');
+const { getDb } = require('./utils/db');
+const { REFERRAL_RULES, isReferralExpired, generateReferralCode } = require('./utils/referral');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -21,7 +21,6 @@ exports.handler = async (event) => {
     }
 
     const existingUser = await getUserByUsername(username);
-
     if (existingUser) {
       return {
         statusCode: 400,
@@ -30,83 +29,70 @@ exports.handler = async (event) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    const { db, pool } = getDb();
+    const { pool } = getDb();
 
-    try {
-      let referrerId = null;
-      if (referralCode) {
-        const referrerResult = await pool.query(
-          'SELECT id FROM users WHERE referral_code = $1',
-          [referralCode]
-        );
-
-        if (referrerResult.rows.length > 0) {
-          referrerId = referrerResult.rows[0].id;
-        }
+    // Check referral
+    let referrerId = null;
+    if (referralCode) {
+      const referrerResult = await pool.query(
+        'SELECT id FROM users WHERE referral_code = $1',
+        [referralCode]
+      );
+      if (referrerResult.rows.length > 0) {
+        referrerId = referrerResult.rows[0].id;
       }
-
-      const userValues = {
-        username,
-        password: hashedPassword,
-        email,
-        fullName,
-        companyName,
-        phoneNumber,
-        subscriptionLevel: 'free',
-        isAdmin: false
-      };
-
-      if (referrerId) {
-        userValues.referredBy = referrerId;
-      }
-
-      const [newUser] = await db.insert(users).values(userValues).returning();
-
-      if (referrerId) {
-        await db.insert(referrals).values({
-          referrerId: referrerId,
-          referredId: newUser.id,
-          status: 'pending'
-        });
-
-        console.log(`User ${referrerId} referred new user ${newUser.id}`);
-      }
-
-      const token = generateToken(newUser);
-
-      const userData = {
-        id: newUser.id,
-        username: newUser.username,
-        email: newUser.email,
-        fullName: newUser.fullName,
-        companyName: newUser.companyName,
-        subscriptionLevel: newUser.subscriptionLevel,
-        referredBy: newUser.referredBy
-      };
-
-      const cookieHeader = `token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 24}`;
-
-      return {
-        statusCode: 201,
-        headers: {
-          'Set-Cookie': cookieHeader,
-          'Cache-Control': 'no-cache',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user: userData,
-          token: token,
-          wasReferred: !!referrerId
-        })
-      };
-    } finally {
-      await pool.end();
     }
+
+    const userReferralCode = generateReferralCode();
+
+    const newUserResult = await pool.query(
+      `INSERT INTO users (username, password, email, full_name, company_name, phone_number, subscription_level, is_admin, referral_code, referred_by)
+       VALUES ($1, $2, $3, $4, $5, $6, 'free', false, $7, $8)
+       RETURNING *`,
+      [username, hashedPassword, email, fullName, companyName, phoneNumber, userReferralCode, referrerId]
+    );
+
+    const newUser = newUserResult.rows[0];
+
+    if (referrerId) {
+      await pool.query(
+        `INSERT INTO referrals (referrer_id, referred_id, status, created_at)
+         VALUES ($1, $2, 'pending', NOW())`,
+        [referrerId, newUser.id]
+      );
+    }
+
+    const token = generateToken(newUser);
+    const cookieHeader = `token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 24}`;
+
+    const userData = {
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      fullName: newUser.full_name,
+      companyName: newUser.company_name,
+      subscriptionLevel: newUser.subscription_level,
+      referredBy: newUser.referred_by
+    };
+
+    return {
+      statusCode: 201,
+      headers: {
+        'Set-Cookie': cookieHeader,
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: userData,
+        token: token,
+        wasReferred: !!referrerId
+      })
+    };
   } catch (error) {
     console.error('Registration error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Registration failed' })
+      body: JSON.stringify({ error: 'Registration failed', message: error.message })
     };
   }
 };
