@@ -63,3 +63,9 @@
 #   from = "/*"
 #   to = "/404/index.html"
 #   status = 404
+
+[functions."stripe-webhook"]
+  type = "raw"
+  included_files = ["utils/**"]
+  external_node_modules = ["stripe", "pg"]
+
