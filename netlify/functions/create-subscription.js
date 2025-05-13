@@ -30,13 +30,13 @@ exports.handler = async (event) => {
     const { pool } = getDb();
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    // Get plan details
+    // Fetch subscription plan
     const planResult = await pool.query(
       'SELECT * FROM subscription_plans WHERE id = $1',
       [planId]
     );
-    const plan = planResult.rows[0];
 
+    const plan = planResult.rows[0];
     if (!plan) {
       return {
         statusCode: 404,
