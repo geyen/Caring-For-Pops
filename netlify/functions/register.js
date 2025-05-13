@@ -6,6 +6,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -13,17 +14,21 @@ exports.handler = async (event) => {
   try {
     const { username, password, email, fullName, companyName, phoneNumber, referralCode } = JSON.parse(event.body);
 
+    // Basic input validation
     if (!username || !password || !email) {
       return {
         statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Username, password, and email are required' })
       };
     }
 
+    // Check for duplicate user
     const existingUser = await getUserByUsername(username);
     if (existingUser) {
       return {
         statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Username already exists' })
       };
     }
@@ -31,7 +36,7 @@ exports.handler = async (event) => {
     const hashedPassword = await hashPassword(password);
     const { pool } = getDb();
 
-    // Check referral
+    // Handle referral code
     let referrerId = null;
     if (referralCode) {
       const referrerResult = await pool.query(
@@ -45,6 +50,7 @@ exports.handler = async (event) => {
 
     const userReferralCode = generateReferralCode();
 
+    // Create user
     const newUserResult = await pool.query(
       `INSERT INTO users (username, password, email, full_name, company_name, phone_number, subscription_level, is_admin, referral_code, referred_by)
        VALUES ($1, $2, $3, $4, $5, $6, 'free', false, $7, $8)
@@ -54,6 +60,7 @@ exports.handler = async (event) => {
 
     const newUser = newUserResult.rows[0];
 
+    // Create referral record if needed
     if (referrerId) {
       await pool.query(
         `INSERT INTO referrals (referrer_id, referred_id, status, created_at)
@@ -84,7 +91,7 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         user: userData,
-        token: token,
+        token,
         wasReferred: !!referrerId
       })
     };
@@ -92,6 +99,7 @@ exports.handler = async (event) => {
     console.error('Registration error:', error);
     return {
       statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: 'Registration failed', message: error.message })
     };
   }
