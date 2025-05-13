@@ -109,3 +109,22 @@ async function createTables(pool) {
       user_id INTEGER NOT NULL REFERENCES users(id),
       lead_id INTEGER NOT NULL REFERENCES care_requests(id),
       amount INTEGER NOT NULL,
+      payment_intent_id VARCHAR(100),
+      purchased_at TIMESTAMP DEFAULT NOW(),
+      refunded BOOLEAN DEFAULT FALSE
+    );
+
+    CREATE TABLE IF NOT EXISTS referrals (
+      id SERIAL PRIMARY KEY,
+      referrer_id INTEGER NOT NULL REFERENCES users(id),
+      referred_id INTEGER NOT NULL REFERENCES users(id),
+      created_at TIMESTAMP DEFAULT NOW(),
+      bonus_awarded BOOLEAN DEFAULT FALSE,
+      bonus_awarded_at TIMESTAMP,
+      status VARCHAR(50) DEFAULT 'pending',
+      qualified_at TIMESTAMP
+    );
+  `);
+
+  return { created: true };
+}
