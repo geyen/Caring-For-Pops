@@ -9,18 +9,9 @@ function getDb() {
   });
 
   return {
-    db: pool, // optional if you use db.insert etc.
+    db: pool, // optional alias
     pool
   };
 }
 
 module.exports = { getDb };
-
-          },
-        }),
-      }),
-    },
-  };
-}
-
-exports.getDb = getDb;
