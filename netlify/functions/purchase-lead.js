@@ -6,6 +6,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -15,6 +16,7 @@ exports.handler = async (event) => {
     if (!user) {
       return {
         statusCode: 401,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Authentication required' })
       };
     }
@@ -23,13 +25,14 @@ exports.handler = async (event) => {
     if (!leadId) {
       return {
         statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Lead ID is required' })
       };
     }
 
     const { pool } = getDb();
 
-    // Check if lead exists and is not claimed
+    // Check that lead exists and is not already claimed
     const leadResult = await pool.query(
       'SELECT * FROM care_requests WHERE id = $1 AND claimed_by IS NULL',
       [leadId]
@@ -39,26 +42,28 @@ exports.handler = async (event) => {
     if (!lead) {
       return {
         statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Lead not found or already claimed' })
       };
     }
 
-    // Get user data
+    // Fetch user lead status
     const userResult = await pool.query(
-      'SELECT id, bonus_leads_available, subscription_level, leads_available FROM users WHERE id = $1',
+      `SELECT id, bonus_leads_available, subscription_level, leads_available, stripe_customer_id 
+       FROM users WHERE id = $1`,
       [user.id]
     );
 
-    if (userResult.rows.length === 0) {
+    const userData = userResult.rows[0];
+    if (!userData) {
       return {
         statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'User not found' })
       };
     }
 
-    const userData = userResult.rows[0];
-
-    // 🔹 Subscription lead available
+    // 🔹 Use subscription lead
     if (userData.subscription_level !== 'free' && userData.leads_available > 0) {
       await pool.query(
         'UPDATE users SET leads_available = leads_available - 1 WHERE id = $1',
@@ -76,18 +81,19 @@ exports.handler = async (event) => {
 
       return {
         statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           success: true,
           message: 'Lead claimed using subscription',
           leadId,
-          paymentRequired: false,
           leadType: 'subscription',
+          paymentRequired: false,
           remainingLeads: userData.leads_available - 1
         })
       };
     }
 
-    // 🔹 Bonus lead available
+    // 🔹 Use bonus lead
     if (useBonusLead && userData.bonus_leads_available > 0) {
       await pool.query(
         'UPDATE users SET bonus_leads_available = bonus_leads_available - 1 WHERE id = $1',
@@ -105,23 +111,24 @@ exports.handler = async (event) => {
 
       return {
         statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           success: true,
           message: 'Lead claimed using bonus lead',
           leadId,
-          paymentRequired: false,
           leadType: 'bonus',
+          paymentRequired: false,
           remainingBonusLeads: userData.bonus_leads_available - 1
         })
       };
     }
 
-    // 🔹 No free/bonus — use Stripe
+    // 🔹 Pay-per-lead via Stripe
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 5000,
+      amount: 5000, // $50.00 in cents
       currency: 'usd',
-      customer: user.stripeCustomerId || undefined,
+      customer: userData.stripe_customer_id || undefined,
       metadata: {
         leadId: leadId.toString(),
         userId: user.id.toString()
@@ -131,19 +138,21 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         success: true,
-        clientSecret: paymentIntent.client_secret,
         leadId,
+        leadType: 'paid',
         amount: 5000,
         paymentRequired: true,
-        leadType: 'paid'
+        clientSecret: paymentIntent.client_secret
       })
     };
   } catch (error) {
     console.error('Purchase lead error:', error);
     return {
       statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         error: 'Failed to process lead purchase',
         message: error.message
