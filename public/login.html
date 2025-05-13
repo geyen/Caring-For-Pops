@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Login</title>
 </head>
 <body>
@@ -9,12 +9,12 @@
   <form id="login-form">
     <label>
       Username:
-      <input type="text" name="username" required>
-    </label><br>
+      <input type="text" name="username" required />
+    </label><br />
     <label>
       Password:
-      <input type="password" name="password" required>
-    </label><br>
+      <input type="password" name="password" required />
+    </label><br />
     <button type="submit">Log In</button>
   </form>
 
@@ -35,7 +35,7 @@
       };
 
       try {
-        const response = await fetch('/api/login', {
+        const response = await fetch('/.netlify/functions/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -47,6 +47,8 @@
 
         if (response.ok) {
           result.textContent = `✅ Logged in as ${resData.user.username}`;
+          // Optionally redirect:
+          // window.location.href = '/dashboard.html';
         } else {
           result.textContent = `❌ ${resData.error || 'Login failed'}`;
         }
