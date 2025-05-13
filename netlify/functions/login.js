@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { generateToken, getUserByUsername } = require('./auth');
+const { generateToken, getUserByUsername } = require('./utils/auth');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
