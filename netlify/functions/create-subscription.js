@@ -6,6 +6,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
@@ -15,6 +16,7 @@ exports.handler = async (event) => {
     if (!user) {
       return {
         statusCode: 401,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Authentication required' })
       };
     }
@@ -23,6 +25,7 @@ exports.handler = async (event) => {
     if (!planId) {
       return {
         statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Plan ID is required' })
       };
     }
@@ -30,7 +33,7 @@ exports.handler = async (event) => {
     const { pool } = getDb();
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    // Fetch subscription plan
+    // Get subscription plan
     const planResult = await pool.query(
       'SELECT * FROM subscription_plans WHERE id = $1',
       [planId]
@@ -40,28 +43,31 @@ exports.handler = async (event) => {
     if (!plan) {
       return {
         statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ error: 'Subscription plan not found' })
       };
     }
 
-    let { stripeCustomerId } = user;
+    let { stripe_customer_id } = user;
 
-    if (!stripeCustomerId) {
+    // Create Stripe customer if missing
+    if (!stripe_customer_id) {
       const customer = await stripe.customers.create({
         email: user.email,
-        name: user.fullName || user.username,
+        name: user.full_name || user.username,
         metadata: { userId: user.id.toString() }
       });
 
-      stripeCustomerId = customer.id;
+      stripe_customer_id = customer.id;
 
       await pool.query(
         'UPDATE users SET stripe_customer_id = $1 WHERE id = $2',
-        [stripeCustomerId, user.id]
+        [stripe_customer_id, user.id]
       );
     }
 
-    const stripePrice = await stripe.prices.create({
+    // Create Stripe price dynamically
+    const price = await stripe.prices.create({
       unit_amount: plan.price,
       currency: 'usd',
       recurring: { interval: 'month' },
@@ -74,9 +80,10 @@ exports.handler = async (event) => {
       }
     });
 
+    // Create subscription
     const subscription = await stripe.subscriptions.create({
-      customer: stripeCustomerId,
-      items: [{ price: stripePrice.id }],
+      customer: stripe_customer_id,
+      items: [{ price: price.id }],
       payment_behavior: 'default_incomplete',
       expand: ['latest_invoice.payment_intent'],
       metadata: {
@@ -85,9 +92,10 @@ exports.handler = async (event) => {
       }
     });
 
+    // Update user record
     await pool.query(
       'UPDATE users SET subscription_level = $1, stripe_subscription_id = $2 WHERE id = $3',
-      [plan.name, subscription.id, user.id]
+      [plan.name.toLowerCase(), subscription.id, user.id]
     );
 
     return {
