@@ -1,23 +1,20 @@
-// Logout function for Netlify
-
-exports.handler = async (event, context) => {
-  // Only allow POST requests
+exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: 'Method Not Allowed' })
     };
   }
 
   try {
-    // Clear the authentication cookie
-    const cookieHeader = 'token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0';
+    // Clear the JWT cookie
+    const expiredCookie = 'token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0';
 
-    // Return success
     return {
       statusCode: 200,
       headers: {
-        'Set-Cookie': cookieHeader,
+        'Set-Cookie': expiredCookie,
         'Cache-Control': 'no-cache',
         'Content-Type': 'application/json'
       },
@@ -27,7 +24,8 @@ exports.handler = async (event, context) => {
     console.error('Logout error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Logout failed' })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Logout failed', message: error.message })
     };
   }
 };
