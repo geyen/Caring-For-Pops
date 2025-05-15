@@ -20,10 +20,10 @@ exports.handler = async (event) => {
 
     const { pool } = getDb();
 
-    // Get user info
+    // Get user and their zip code
     const userResult = await pool.query(
-      `SELECT id, username, subscription_level, 
-              COALESCE(leads_available, 0) AS leads_available, 
+      `SELECT id, username, zip_code, subscription_level,
+              COALESCE(leads_available, 0) AS leads_available,
               COALESCE(bonus_leads_available, 0) AS bonus_leads_available
        FROM users WHERE id = $1`,
       [user.id]
@@ -37,47 +37,43 @@ exports.handler = async (event) => {
     }
 
     const userData = userResult.rows[0];
+    const userZip = userData.zip_code || '55401';
 
-    // Get filter values from query
-    const params = event.queryStringParameters || {};
-    const zip = params.zip;
-    const careType = params.careType;
+    // Hardcoded nearby ZIPs for MN metro area
+    const nearbyZipMap = {
+      "55401": ["55401", "55402", "55403", "55404", "55405", "55406", "55407", "55408", "55409", "55410", "55411", "55412", "55413", "55414", "55415", "55416", "55417", "55418", "55419"],
+      "55420": ["55420", "55421", "55422", "55423", "55424", "55425", "55426", "55427", "55428", "55429", "55430", "55431", "55432", "55433", "55434", "55435", "55436", "55437", "55438", "55439"],
+      "55343": ["55343", "55344", "55345", "55346", "55347", "55305", "55391"],
+      "55311": ["55311", "55369", "55374", "55316", "55340", "55357"],
+      "55101": ["55101", "55102", "55103", "55104", "55105", "55106", "55107", "55108", "55109", "55110", "55113", "55114", "55116", "55117", "55118", "55119", "55130"],
+      "55044": ["55044", "55024", "55057", "55068", "55070"],
+      "55123": ["55123", "55124", "55076", "55077", "55121", "55122"],
+      "55303": ["55303", "55304", "55330", "55316", "55327", "55398"]
+    };
 
-    // Dynamic filter building
-    const filterConditions = [`status = 'new'`];
-    const filterValues = [];
+    const allowedZips = nearbyZipMap[userZip] || [userZip];
 
-    if (zip) {
-      filterConditions.push(`zip_code = $${filterValues.length + 1}`);
-      filterValues.push(zip);
-    }
+    // Get available leads in those zips
+    const leadsResult = await pool.query(
+      `SELECT id, patient_name, contact_name, email, phone_number,
+              address, city, state, zip_code, care_type, care_details, care_hours,
+              urgency, created_at
+       FROM care_requests
+       WHERE status = 'new'
+         AND zip_code = ANY($1::text[])
+       ORDER BY 
+         CASE 
+           WHEN urgency = 'immediate' THEN 1
+           WHEN urgency = 'within_week' THEN 2
+           WHEN urgency = 'within_month' THEN 3
+           ELSE 4
+         END,
+         created_at DESC
+       LIMIT 10`,
+      [allowedZips]
+    );
 
-    if (careType) {
-      filterConditions.push(`care_type = $${filterValues.length + 1}`);
-      filterValues.push(careType);
-    }
-
-    const filterClause = filterConditions.length ? `WHERE ${filterConditions.join(' AND ')}` : '';
-
-    const leadsQuery = `
-      SELECT id, patient_name, contact_name, email, phone_number, 
-             address, city, state, zip_code, care_type, care_details, care_hours, 
-             urgency, created_at
-      FROM care_requests
-      ${filterClause}
-      ORDER BY 
-        CASE 
-          WHEN urgency = 'immediate' THEN 1
-          WHEN urgency = 'within_week' THEN 2
-          WHEN urgency = 'within_month' THEN 3
-          ELSE 4
-        END,
-        created_at DESC
-      LIMIT 10
-    `;
-
-    const leadsResult = await pool.query(leadsQuery, filterValues);
-
+    // Referral stats
     const referralsResult = await pool.query(
       `SELECT 
         COUNT(*) AS total_referrals,
@@ -101,11 +97,11 @@ exports.handler = async (event) => {
         user: {
           id: userData.id,
           username: userData.username,
+          zipCode: userZip,
           subscriptionLevel: userData.subscription_level,
           leadsAvailable: parseInt(userData.leads_available),
           bonusLeadsAvailable: parseInt(userData.bonus_leads_available),
-          totalLeadsAvailable:
-            parseInt(userData.leads_available) + parseInt(userData.bonus_leads_available)
+          totalLeadsAvailable: parseInt(userData.leads_available) + parseInt(userData.bonus_leads_available)
         },
         availableLeads: leadsResult.rows,
         referrals: {
@@ -115,13 +111,14 @@ exports.handler = async (event) => {
         }
       })
     };
+
   } catch (error) {
     console.error('Error fetching leads:', error);
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        error: 'Failed to load dashboard',
+        error: 'Failed to fetch leads',
         message: error.message
       })
     };
