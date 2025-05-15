@@ -4,40 +4,74 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact Us – Caring for Pops</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background-color: #fefefe;
-      color: #333;
-    }
-    h1 {
-      color: #D35400;
-    }
-    .contact-info {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-    }
-    .contact-info a {
-      color: #D35400;
-      text-decoration: none;
-    }
-    .back-link {
-      display: block;
-      margin-top: 2rem;
-    }
-  </style>
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <h1>Contact Caring for Pops</h1>
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <a href="/"><img src="/images/logo-original.png" alt="Caring For Pops Logo" style="max-height: 80px;"></a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/providers">For Affiliates</a></li>
+          <li><a href="/faq">FAQs</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-  <p>We'd love to hear from you. Please reach out to us via email:</p>
+  <main>
+    <section class="contact-section">
+      <div class="container">
+        <h1>Contact Caring for Pops</h1>
+        <p>We'd love to hear from you. Please reach out to us via email:</p>
 
-  <div class="contact-info">
-    📧 <a href="mailto:info@caringforpops.com">info@caringforpops.com</a><br />
-    📧 <a href="mailto:lyndsay@caringforpops.com">lyndsay@caringforpops.com</a>
-  </div>
+        <div class="contact-info">
+          <p>📧 <a href="mailto:info@caringforpops.com">info@caringforpops.com</a></p>
+          <p>📧 <a href="mailto:lyndsay@caringforpops.com">lyndsay@caringforpops.com</a></p>
+        </div>
 
-  <a class="back-link" href="/index.html">← Back to Home</a>
+        <a class="btn btn-outline" href="/">← Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="/images/logo-original.png" alt="Caring For Pops Logo" style="max-height: 100px;">
+          <p>Connecting Hearts to Home Health Care</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h3>Contact</h3>
+            <ul>
+              <li><a href="mailto:info@caringforpops.com">info@caringforpops.com</a></li>
+              <li><a href="mailto:lyndsay@caringforpops.com">lyndsay@caringforpops.com</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Explore</h3>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/faq">FAQs</a></li>
+              <li><a href="/providers">Affiliates</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Caring For Pops. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
