@@ -15,47 +15,87 @@
     h1 {
       color: #D35400;
     }
+    nav button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #D35400;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
     .lead-card {
       border: 1px solid #ccc;
       padding: 1rem;
       border-radius: 8px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
-    .lead-meta {
-      margin-bottom: 0.5rem;
+    .lead-meta { margin-bottom: 0.5rem; }
+    .disabled { background-color: #ccc !important; cursor: not-allowed; }
+    .filter-bar input, .filter-bar select {
+      padding: 0.5rem;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
     }
-    button {
-      background-color: #D35400;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-    .leads-count {
-      font-weight: 600;
+    .upgrade-box {
+      background: #fff8e1;
+      padding: 1rem;
+      margin: 2rem 0;
+      border-left: 4px solid #f39c12;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Provider Portal</h1>
-    <div class="leads-count" id="leadStatus">Loading subscription info...</div>
+
+  <h1>Provider Portal</h1>
+
+  <nav>
+    <button onclick="showTab('available')">Available Leads</button>
+    <button onclick="showTab('myLeads')">My Leads</button>
+  </nav>
+
+  <div id="subscriptionInfo" class="upgrade-box">Loading subscription info...</div>
+
+  <div class="filter-bar" id="filterBar" style="display:none;">
+    <input type="text" id="zipFilter" placeholder="Filter by ZIP">
+    <select id="careTypeFilter">
+      <option value="">All Care Types</option>
+      <option value="companionship">Companionship</option>
+      <option value="personal">Personal Care</option>
+      <option value="specialized">Specialized</option>
+      <option value="medical">Medical</option>
+      <option value="respite">Respite</option>
+      <option value="other">Other</option>
+    </select>
+    <button onclick="applyFilters()">Apply Filters</button>
   </div>
 
-  <div id="leadList">Loading leads...</div>
+  <div id="availableTab">Loading leads...</div>
+  <div id="myLeadsTab" style="display:none;">Loading your claimed leads...</div>
 
   <script>
+    let allLeads = [];
+    let claimedLeads = [];
+    let leadCount = 0;
+
+    function showTab(tab) {
+      document.getElementById('availableTab').style.display = tab === 'available' ? 'block' : 'none';
+      document.getElementById('myLeadsTab').style.display = tab === 'myLeads' ? 'block' : 'none';
+      document.getElementById('filterBar').style.display = tab === 'available' ? 'block' : 'none';
+    }
+
+    function applyFilters() {
+      const zip = document.getElementById('zipFilter').value.trim();
+      const type = document.getElementById('careTypeFilter').value;
+
+      const filtered = allLeads.filter(lead =>
+        (!zip || lead.zip_code === zip) &&
+        (!type || lead.care_type === type)
+      );
+
+      renderLeads(filtered);
+    }
+
     async function fetchUser() {
       const res = await fetch("/.netlify/functions/user");
       if (!res.ok) throw new Error("Unauthorized");
@@ -64,9 +104,14 @@
 
     async function fetchLeads() {
       const res = await fetch("/.netlify/functions/get-available-leads");
-      if (!res.ok) throw new Error("Error fetching leads");
       const data = await res.json();
       return data.availableLeads || [];
+    }
+
+    async function fetchMyLeads() {
+      const res = await fetch("/.netlify/functions/get-my-leads");
+      const data = await res.json();
+      return data.leads || [];
     }
 
     async function purchaseLead(leadId) {
@@ -82,71 +127,84 @@
         return;
       }
 
-      alert("✅ Lead successfully claimed!");
+      alert("✅ Lead claimed!");
       location.reload();
     }
 
-    async function initPortal() {
+    function renderLeads(leads) {
+      const container = document.getElementById("availableTab");
+      container.innerHTML = "";
+
+      if (!leads.length) {
+        container.innerHTML = "<p>No available leads found.</p>";
+        return;
+      }
+
+      leads.forEach(lead => {
+        const card = document.createElement("div");
+        card.className = "lead-card";
+        card.innerHTML = `
+          <div class="lead-meta"><strong>Name:</strong> ${lead.full_name || "N/A"}</div>
+          <div class="lead-meta"><strong>ZIP:</strong> ${lead.zip_code}</div>
+          <div class="lead-meta"><strong>Care Type:</strong> ${lead.care_type}</div>
+          <div class="lead-meta"><strong>Needed:</strong> ${lead.start_date}</div>
+          <button ${leadCount <= 0 ? "disabled class='disabled'" : ""} onclick="purchaseLead('${lead.id}')">
+            ${leadCount <= 0 ? "No Leads Left" : "Claim This Lead"}
+          </button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderMyLeads(leads) {
+      const container = document.getElementById("myLeadsTab");
+      container.innerHTML = "";
+
+      if (!leads.length) {
+        container.innerHTML = "<p>You haven't claimed any leads yet.</p>";
+        return;
+      }
+
+      leads.forEach(lead => {
+        const card = document.createElement("div");
+        card.className = "lead-card";
+        card.innerHTML = `
+          <div class="lead-meta"><strong>Name:</strong> ${lead.patient_name}</div>
+          <div class="lead-meta"><strong>ZIP:</strong> ${lead.zip_code}</div>
+          <div class="lead-meta"><strong>Care Type:</strong> ${lead.care_type}</div>
+          <div class="lead-meta"><strong>Email:</strong> ${lead.email}</div>
+          <div class="lead-meta"><strong>Phone:</strong> ${lead.phone_number}</div>
+          <div class="lead-meta"><strong>Claimed On:</strong> ${new Date(lead.purchased_at).toLocaleDateString()}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function init() {
       try {
         const user = await fetchUser();
 
-        // Role-based client-side protection
-        if (!["basic", "growth", "elite"].includes(user.subscriptionLevel)) {
-          alert("This portal is for providers only. Please upgrade your plan.");
-          window.location.href = "/";
-          return;
-        }
+        leadCount = user.leadsAvailable || 0;
+        const plan = user.subscriptionLevel || 'free';
 
-        const leadCount = user.leadsAvailable || 0;
-        const bonusLeads = user.bonusLeadsAvailable || 0;
-        const total = leadCount + bonusLeads;
-        const subLevel = user.subscriptionLevel || "free";
-
-        document.getElementById("leadStatus").textContent = 
-          `Plan: ${subLevel.toUpperCase()} | Leads Left: ${total}`;
-
-        const leads = await fetchLeads();
-        const listEl = document.getElementById("leadList");
-        listEl.innerHTML = "";
-
-        if (!leads.length) {
-          listEl.innerHTML = `
-            <div style="text-align:center; margin-top:2rem;">
-              <p>🚫 No new leads right now.</p>
-              <p>We'll notify you when families request care in your area.</p>
-            </div>
-          `;
-          return;
-        }
-
-        leads.forEach((lead) => {
-          const div = document.createElement("div");
-          div.className = "lead-card";
-          div.innerHTML = `
-            <div class="lead-meta"><strong>Patient:</strong> ${lead.patient_name || "N/A"}</div>
-            <div class="lead-meta"><strong>ZIP:</strong> ${lead.zip_code}</div>
-            <div class="lead-meta"><strong>Care Type:</strong> ${lead.care_type}</div>
-            <div class="lead-meta"><strong>Urgency:</strong> ${lead.urgency || "N/A"}</div>
-            <div class="lead-meta"><strong>Care Details:</strong> ${lead.care_details || "Not provided"}</div>
-            <div class="lead-meta"><strong>Requested On:</strong> ${new Date(lead.created_at).toLocaleDateString()}</div>
-            <button ${total <= 0 ? "disabled" : ""} onclick="purchaseLead('${lead.id}')">
-              ${total <= 0 ? "No Leads Left" : "Claim This Lead"}
-            </button>
-          `;
-          listEl.appendChild(div);
-        });
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById("leadList").innerHTML = `
-          <p>❌ You must be logged in to view this portal.</p>
-          <p><a href="/auth">Go to login</a></p>
+        document.getElementById("subscriptionInfo").innerHTML = `
+          <strong>Plan:</strong> ${plan.toUpperCase()}<br>
+          <strong>Leads Left:</strong> ${leadCount}<br>
+          <a href="/plans" style="color:#D35400;">🔼 Upgrade your plan</a>
         `;
-        document.getElementById("leadStatus").textContent = "Not logged in";
+
+        allLeads = await fetchLeads();
+        claimedLeads = await fetchMyLeads();
+
+        renderLeads(allLeads);
+        renderMyLeads(claimedLeads);
+      } catch (err) {
+        document.body.innerHTML = `<p>❌ Unauthorized. Please <a href="/auth">login</a>.</p>`;
+        console.error(err);
       }
     }
 
-    initPortal();
+    init();
   </script>
 </body>
 </html>
