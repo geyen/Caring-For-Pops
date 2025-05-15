@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Caring For Pops</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .admin-dashboard {
+      padding: 2rem 0;
+    }
+    
+    .admin-section {
+      margin-bottom: 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+    }
+    
+    .admin-section h2 {
+      margin-top: 0;
+      border-bottom: 1px solid #e1e1e1;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    
+    .data-table th {
+      background-color: #f6f7fb;
+      text-align: left;
+      padding: 0.75rem;
+      font-weight: 600;
+      color: #555;
+      border-bottom: 2px solid #e1e1e1;
+    }
+    
+    .data-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #e1e1e1;
+      color: #333;
+    }
+    
+    .data-table tr:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .status-pill {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-new {
+      background-color: #e3f2fd;
+      color: #0277bd;
+    }
+    
+    .status-claimed {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .status-inactive {
+      background-color: #f5f5f5;
+      color: #757575;
+    }
+    
+    .admin-filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .admin-filters select, .admin-filters input {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .stat-card {
+      background-color: #f6f7fb;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #5c6ac4;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .unauthorized-message {
+      text-align: center;
+      padding: 3rem;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    
+    .unauthorized-message h2 {
+      color: #d32f2f;
+      margin-bottom: 1rem;
+    }
+    
+    .admin-action-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #5c6ac4;
+      color: white;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    
+    .admin-action-btn:hover {
+      background-color: #4354b0;
+    }
+
+    .admin-action-btn.delete {
+      background-color: #d32f2f;
+    }
+    
+    .admin-action-btn.delete:hover {
+      background-color: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a href="/">
+            <img src="/images/logo.svg" alt="Caring For Pops Logo">
+          </a>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/providers">For Affiliates</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/faq">FAQs</a></li>
+            <li><a href="/auth" class="btn btn-primary login-btn">Login</a></li>
+          </ul>
+        </nav>
+        <button class="mobile-menu-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Admin Dashboard</h1>
+        <p>Monitor and manage all aspects of Caring for Pops platform</p>
+      </div>
+    </section>
+
+    <div class="admin-dashboard container">
+      <!-- This section only displays for admins -->
+      <div id="admin-content" style="display: none;">
+        <div class="admin-section">
+          <h2>Dashboard Overview</h2>
+          <div class="admin-stats">
+            <div class="stat-card">
+              <div class="stat-value" id="total-leads">0</div>
+              <div class="stat-label">Total Leads</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="claimed-leads">0</div>
+              <div class="stat-label">Claimed Leads</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="total-affiliates">0</div>
+              <div class="stat-label">Total Affiliates</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="subscription-revenue">$0</div>
+              <div class="stat-label">Monthly Revenue</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="admin-section">
+          <h2>Care Request Leads</h2>
+          <div class="admin-filters">
+            <select id="lead-status-filter">
+              <option value="all">All Statuses</option>
+              <option value="new">New (Unclaimed)</option>
+              <option value="claimed">Claimed</option>
+            </select>
+            <input type="text" placeholder="Search by name or location" id="lead-search">
+          </div>
+          
+          <div class="table-responsive">
+            <table class="data-table" id="leads-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Patient</th>
+                  <th>Contact</th>
+                  <th>Location</th>
+                  <th>Care Type</th>
+                  <th>Created</th>
+                  <th>Status</th>
+                  <th>Claimed By</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="leads-table-body">
+                <!-- Data will be dynamically inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="admin-section">
+          <h2>Affiliate Management</h2>
+          <div class="admin-filters">
+            <select id="affiliate-filter">
+              <option value="all">All Affiliates</option>
+              <option value="free">Free Tier</option>
+              <option value="basic">Basic Tier</option>
+              <option value="growth">Growth Tier</option>
+              <option value="elite">Elite Tier</option>
+            </select>
+            <input type="text" placeholder="Search by name or company" id="affiliate-search">
+          </div>
+          
+          <div class="table-responsive">
+            <table class="data-table" id="affiliates-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Company</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Subscription</th>
+                  <th>Leads Claimed</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="affiliates-table-body">
+                <!-- Data will be dynamically inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Unauthorized message for non-admin users -->
+      <div id="unauthorized-message" class="unauthorized-message">
+        <h2>Admin Access Required</h2>
+        <p>You need to be logged in as an administrator to view this page.</p>
+        <p>Please log in with an admin account or contact the system administrator for access.</p>
+        <div style="margin-top: 2rem;">
+          <a href="/auth" class="btn btn-primary">Login</a>
+          <a href="/" class="btn btn-outline">Return Home</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="/images/logo-white.svg" alt="Caring For Pops Logo">
+          <p>Connecting Hearts to Home Health Care</p>
+          <p>Caring for Pops is not a care provider, we're a care connector.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h3>For Clients</h3>
+            <ul>
+              <li><a href="/#how-it-works">How It Works</a></li>
+              <li><a href="/#care-form">Find Care Providers</a></li>
+              <li><a href="/faq">FAQs</a></li>
+              <li><a href="/resources">Resources</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>For Affiliates</h3>
+            <ul>
+              <li><a href="/providers">Join Our Network</a></li>
+              <li><a href="/providers#subscription-plans">Affiliate Program</a></li>
+              <li><a href="/provider-resources">Affiliate Resources</a></li>
+              <li><a href="/provider-faq">Affiliate FAQs</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/about#contact">Contact</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms and Conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Caring For Pops. All rights reserved.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.053 10.053 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    // Check if user is logged in and is admin
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('/api/user')
+        .then(response => {
+          if (!response.ok) throw new Error('Not authenticated');
+          return response.json();
+        })
+        .then(user => {
+          if (user.isAdmin) {
+            // User is admin, show admin content
+            document.getElementById('admin-content').style.display = 'block';
+            document.getElementById('unauthorized-message').style.display = 'none';
+            
+            // Load admin data
+            loadDashboardData();
+            loadLeadsData();
+            loadAffiliatesData();
+          } else {
+            // User is logged in but not admin
+            document.getElementById('admin-content').style.display = 'none';
+            document.getElementById('unauthorized-message').style.display = 'block';
+          }
+        })
+        .catch(error => {
+          // User is not logged in
+          document.getElementById('admin-content').style.display = 'none';
+          document.getElementById('unauthorized-message').style.display = 'block';
+        });
+    });
+    
+    // Function to load dashboard data
+    function loadDashboardData() {
+      // In a real implementation, this would fetch from an API
+      Promise.all([
+        fetch('/api/admin/stats/leads').then(res => res.json()),
+        fetch('/api/admin/stats/affiliates').then(res => res.json()),
+        fetch('/api/admin/stats/revenue').then(res => res.json())
+      ]).then(([leadsStats, affiliatesStats, revenueStats]) => {
+        document.getElementById('total-leads').textContent = leadsStats.total;
+        document.getElementById('claimed-leads').textContent = leadsStats.claimed;
+        document.getElementById('total-affiliates').textContent = affiliatesStats.total;
+        document.getElementById('subscription-revenue').textContent = '$' + revenueStats.monthly;
+      }).catch(error => {
+        console.error('Error loading dashboard stats:', error);
+      });
+    }
+    
+    // Function to load leads data
+    function loadLeadsData() {
+      fetch('/api/admin/leads')
+        .then(response => response.json())
+        .then(leads => {
+          const tableBody = document.getElementById('leads-table-body');
+          tableBody.innerHTML = '';
+          
+          leads.forEach(lead => {
+            const row = document.createElement('tr');
+            
+            const formattedDate = new Date(lead.createdAt).toLocaleDateString();
+            const statusClass = lead.status === 'new' ? 'status-new' : 'status-claimed';
+            
+            row.innerHTML = `
+              <td>${lead.id}</td>
+              <td>${lead.patientName}</td>
+              <td>${lead.contactName}</td>
+              <td>${lead.city}, ${lead.state}</td>
+              <td>${lead.careType}</td>
+              <td>${formattedDate}</td>
+              <td><span class="status-pill ${statusClass}">${lead.status}</span></td>
+              <td>${lead.claimedByName || 'Unclaimed'}</td>
+              <td>
+                <button class="admin-action-btn view-lead" data-id="${lead.id}">View</button>
+                <button class="admin-action-btn delete" data-id="${lead.id}">Delete</button>
+              </td>
+            `;
+            
+            tableBody.appendChild(row);
+          });
+          
+          // Add event listeners to buttons
+          document.querySelectorAll('.view-lead').forEach(button => {
+            button.addEventListener('click', function() {
+              const leadId = this.getAttribute('data-id');
+              // Implement view lead details functionality
+              alert(`View lead ${leadId} details (to be implemented)`);
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Error loading leads data:', error);
+        });
+    }
+    
+    // Function to load affiliates data
+    function loadAffiliatesData() {
+      fetch('/api/admin/affiliates')
+        .then(response => response.json())
+        .then(affiliates => {
+          const tableBody = document.getElementById('affiliates-table-body');
+          tableBody.innerHTML = '';
+          
+          affiliates.forEach(affiliate => {
+            const row = document.createElement('tr');
+            
+            const formattedDate = new Date(affiliate.createdAt).toLocaleDateString();
+            
+            row.innerHTML = `
+              <td>${affiliate.id}</td>
+              <td>${affiliate.fullName}</td>
+              <td>${affiliate.companyName}</td>
+              <td>${affiliate.email}</td>
+              <td>${affiliate.phoneNumber || 'N/A'}</td>
+              <td>${affiliate.subscriptionLevel}</td>
+              <td>${affiliate.leadsClaimed}</td>
+              <td>${formattedDate}</td>
+              <td>
+                <button class="admin-action-btn view-affiliate" data-id="${affiliate.id}">View</button>
+                <button class="admin-action-btn edit-affiliate" data-id="${affiliate.id}">Edit</button>
+              </td>
+            `;
+            
+            tableBody.appendChild(row);
+          });
+          
+          // Add event listeners to buttons
+          document.querySelectorAll('.view-affiliate').forEach(button => {
+            button.addEventListener('click', function() {
+              const affiliateId = this.getAttribute('data-id');
+              // Implement view affiliate details functionality
+              alert(`View affiliate ${affiliateId} details (to be implemented)`);
+            });
+          });
+          
+          document.querySelectorAll('.edit-affiliate').forEach(button => {
+            button.addEventListener('click', function() {
+              const affiliateId = this.getAttribute('data-id');
+              // Implement edit affiliate functionality
+              alert(`Edit affiliate ${affiliateId} (to be implemented)`);
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Error loading affiliates data:', error);
+        });
+    }
+    
+    // Filter event listeners
+    document.getElementById('lead-status-filter').addEventListener('change', function() {
+      // Implement lead filtering by status
+    });
+    
+    document.getElementById('lead-search').addEventListener('input', function() {
+      // Implement lead search functionality
+    });
+    
+    document.getElementById('affiliate-filter').addEventListener('change', function() {
+      // Implement affiliate filtering by subscription
+    });
+    
+    document.getElementById('affiliate-search').addEventListener('input', function() {
+      // Implement affiliate search functionality
+    });
+  </script>
+</body>
+</html>
