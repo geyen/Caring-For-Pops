@@ -19,7 +19,10 @@
       border: 1px solid #ccc;
       padding: 1rem;
       border-radius: 8px;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .lead-meta {
+      margin-bottom: 0.5rem;
     }
     button {
       background-color: #D35400;
@@ -32,9 +35,6 @@
     button:disabled {
       background-color: #ccc;
       cursor: not-allowed;
-    }
-    .lead-meta {
-      margin-bottom: 0.5rem;
     }
     .header {
       display: flex;
@@ -65,7 +65,8 @@
     async function fetchLeads() {
       const res = await fetch("/.netlify/functions/get-available-leads");
       if (!res.ok) throw new Error("Error fetching leads");
-      return res.json();
+      const data = await res.json();
+      return data.availableLeads || [];
     }
 
     async function purchaseLead(leadId) {
@@ -78,7 +79,7 @@
       const data = await res.json();
       if (!res.ok) {
         alert(data.error || "Error claiming lead");
-        return false;
+        return;
       }
 
       alert("✅ Lead successfully claimed!");
@@ -87,20 +88,34 @@
 
     async function initPortal() {
       try {
-        const userData = await fetchUser();
-        const { user } = userData;
+        const user = await fetchUser();
 
-        const leadCount = user.leads_available || 0;
-        const subLevel = user.subscription_level || "free";
-        document.getElementById("leadStatus").textContent = `Plan: ${subLevel.toUpperCase()} | Leads Left: ${leadCount}`;
+        // Role-based client-side protection
+        if (!["basic", "growth", "elite"].includes(user.subscriptionLevel)) {
+          alert("This portal is for providers only. Please upgrade your plan.");
+          window.location.href = "/";
+          return;
+        }
+
+        const leadCount = user.leadsAvailable || 0;
+        const bonusLeads = user.bonusLeadsAvailable || 0;
+        const total = leadCount + bonusLeads;
+        const subLevel = user.subscriptionLevel || "free";
+
+        document.getElementById("leadStatus").textContent = 
+          `Plan: ${subLevel.toUpperCase()} | Leads Left: ${total}`;
 
         const leads = await fetchLeads();
-
         const listEl = document.getElementById("leadList");
         listEl.innerHTML = "";
 
         if (!leads.length) {
-          listEl.innerHTML = "<p>No leads available at the moment.</p>";
+          listEl.innerHTML = `
+            <div style="text-align:center; margin-top:2rem;">
+              <p>🚫 No new leads right now.</p>
+              <p>We'll notify you when families request care in your area.</p>
+            </div>
+          `;
           return;
         }
 
@@ -108,12 +123,14 @@
           const div = document.createElement("div");
           div.className = "lead-card";
           div.innerHTML = `
-            <div class="lead-meta"><strong>Name:</strong> ${lead.full_name || "N/A"}</div>
+            <div class="lead-meta"><strong>Patient:</strong> ${lead.patient_name || "N/A"}</div>
             <div class="lead-meta"><strong>ZIP:</strong> ${lead.zip_code}</div>
             <div class="lead-meta"><strong>Care Type:</strong> ${lead.care_type}</div>
-            <div class="lead-meta"><strong>When Needed:</strong> ${lead.start_date}</div>
-            <button ${leadCount <= 0 ? "disabled" : ""} onclick="purchaseLead('${lead.id}')">
-              ${leadCount <= 0 ? "No Leads Left" : "Claim This Lead"}
+            <div class="lead-meta"><strong>Urgency:</strong> ${lead.urgency || "N/A"}</div>
+            <div class="lead-meta"><strong>Care Details:</strong> ${lead.care_details || "Not provided"}</div>
+            <div class="lead-meta"><strong>Requested On:</strong> ${new Date(lead.created_at).toLocaleDateString()}</div>
+            <button ${total <= 0 ? "disabled" : ""} onclick="purchaseLead('${lead.id}')">
+              ${total <= 0 ? "No Leads Left" : "Claim This Lead"}
             </button>
           `;
           listEl.appendChild(div);
