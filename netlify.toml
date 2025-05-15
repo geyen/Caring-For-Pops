@@ -2,32 +2,34 @@
 # This file specifies build settings and redirects for your Netlify deployment
 
 [build]
-  # Settings for static site deployment
   publish = "public"  # Publish the public directory
   command = ""  # No build command needed for a pre-built static site
   functions = "netlify/functions"  # Directory where your Netlify Functions are stored
 
-# Environment variables that will be set for all deploys
 [build.environment]
   NODE_VERSION = "18"  # Set Node.js version for the build
 
-# Production context: all deploys from the main branch
-# Set a higher build priority
-[context.production]
-  # You can override settings for production if needed
-  # For example, different environment variables
-  [context.production.environment]
-    NODE_ENV = "production"
+# Global functions settings (all functions can access utils folder)
+[functions]
+  included_files = ["utils/**"]
 
-# Deploy Preview context: previews of PRs
-[context.deploy-preview]
-  [context.deploy-preview.environment]
-    NODE_ENV = "staging"
+# Specific config for stripe webhook
+[functions."stripe-webhook"]
+  type = "raw"
+  included_files = ["utils/**"]
+  external_node_modules = ["stripe", "pg"]
 
-# Branch Deploy context: all branch deploys that aren't the main branch
-[context.branch-deploy]
-  [context.branch-deploy.environment]
-    NODE_ENV = "staging"
+# Production context
+[context.production.environment]
+  NODE_ENV = "production"
+
+# Deploy Preview context
+[context.deploy-preview.environment]
+  NODE_ENV = "staging"
+
+# Branch Deploy context
+[context.branch-deploy.environment]
+  NODE_ENV = "staging"
 
 # Redirects
 [[redirects]]
@@ -36,7 +38,7 @@
   status = 200
   force = false
 
-# Headers to set for all pages
+# Headers for all routes
 [[headers]]
   for = "/*"
   [headers.values]
@@ -46,26 +48,23 @@
     Referrer-Policy = "no-referrer-when-downgrade"
     Content-Security-Policy = "default-src 'self'; connect-src 'self' https://*.stripe.com; script-src 'self' 'unsafe-inline' https://*.stripe.com; frame-src https://*.stripe.com; img-src 'self' data: https://*.stripe.com;"
 
-# Enable asset optimization
+# Asset optimization
 [build.processing]
   skip_processing = false
+
 [build.processing.css]
   bundle = true
   minify = true
+
 [build.processing.js]
   bundle = true
   minify = true
+
 [build.processing.images]
   compress = true
 
-# You can customize the 404 page
+# Optional 404 page
 # [[redirects]]
 #   from = "/*"
 #   to = "/404/index.html"
 #   status = 404
-
-[functions."stripe-webhook"]
-  type = "raw"
-  included_files = ["utils/**"]
-  external_node_modules = ["stripe", "pg"]
-
