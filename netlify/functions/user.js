@@ -3,7 +3,6 @@ const { getUserFromRequest } = require('./utils/auth');
 
 exports.handler = async (event, context) => {
   try {
-    // Get user from the request (token verification)
     const user = await getUserFromRequest(event);
     
     if (!user) {
@@ -13,17 +12,19 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Return user data (exclude password)
     return {
       statusCode: 200,
       body: JSON.stringify({
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        fullName: user.fullName,
-        companyName: user.companyName,
-        subscriptionLevel: user.subscriptionLevel,
-        isAdmin: user.isAdmin
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          fullName: user.fullName,
+          companyName: user.companyName,
+          subscriptionLevel: user.subscriptionLevel,
+          leads_available: user.leads_available,
+          isAdmin: user.isAdmin
+        }
       })
     };
   } catch (error) {
