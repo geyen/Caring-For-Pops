@@ -20,7 +20,7 @@ exports.handler = async (event) => {
 
     const { pool } = getDb();
 
-    // Get latest user data
+    // Get user info
     const userResult = await pool.query(
       `SELECT id, username, subscription_level, 
               COALESCE(leads_available, 0) AS leads_available, 
@@ -38,25 +38,46 @@ exports.handler = async (event) => {
 
     const userData = userResult.rows[0];
 
-    // Get up to 10 available care requests (not claimed)
-    const leadsResult = await pool.query(
-      `SELECT id, patient_name, contact_name, email, phone_number, 
-              address, city, state, zip_code, care_type, care_details, care_hours, 
-              urgency, created_at
-       FROM care_requests
-       WHERE status = 'new'
-       ORDER BY 
-         CASE 
-           WHEN urgency = 'immediate' THEN 1
-           WHEN urgency = 'within_week' THEN 2
-           WHEN urgency = 'within_month' THEN 3
-           ELSE 4
-         END,
-         created_at DESC
-       LIMIT 10`
-    );
+    // Get filter values from query
+    const params = event.queryStringParameters || {};
+    const zip = params.zip;
+    const careType = params.careType;
 
-    // Referral stats
+    // Dynamic filter building
+    const filterConditions = [`status = 'new'`];
+    const filterValues = [];
+
+    if (zip) {
+      filterConditions.push(`zip_code = $${filterValues.length + 1}`);
+      filterValues.push(zip);
+    }
+
+    if (careType) {
+      filterConditions.push(`care_type = $${filterValues.length + 1}`);
+      filterValues.push(careType);
+    }
+
+    const filterClause = filterConditions.length ? `WHERE ${filterConditions.join(' AND ')}` : '';
+
+    const leadsQuery = `
+      SELECT id, patient_name, contact_name, email, phone_number, 
+             address, city, state, zip_code, care_type, care_details, care_hours, 
+             urgency, created_at
+      FROM care_requests
+      ${filterClause}
+      ORDER BY 
+        CASE 
+          WHEN urgency = 'immediate' THEN 1
+          WHEN urgency = 'within_week' THEN 2
+          WHEN urgency = 'within_month' THEN 3
+          ELSE 4
+        END,
+        created_at DESC
+      LIMIT 10
+    `;
+
+    const leadsResult = await pool.query(leadsQuery, filterValues);
+
     const referralsResult = await pool.query(
       `SELECT 
         COUNT(*) AS total_referrals,
@@ -83,7 +104,8 @@ exports.handler = async (event) => {
           subscriptionLevel: userData.subscription_level,
           leadsAvailable: parseInt(userData.leads_available),
           bonusLeadsAvailable: parseInt(userData.bonus_leads_available),
-          totalLeadsAvailable: parseInt(userData.leads_available) + parseInt(userData.bonus_leads_available)
+          totalLeadsAvailable:
+            parseInt(userData.leads_available) + parseInt(userData.bonus_leads_available)
         },
         availableLeads: leadsResult.rows,
         referrals: {
@@ -94,7 +116,7 @@ exports.handler = async (event) => {
       })
     };
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    console.error('Error fetching leads:', error);
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
