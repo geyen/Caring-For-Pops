@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact Us – Caring for Pops</title>
-
   <link rel="stylesheet" href="/css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 </head>
@@ -30,14 +29,38 @@
     <section class="contact-section">
       <div class="container">
         <h1>Contact Caring for Pops</h1>
-        <p>We'd love to hear from you. Please reach out to us via email:</p>
+        <p>We’d love to hear from you. Use the form below or reach out directly by email.</p>
+
+        <form name="contact" method="POST" data-netlify="true" class="contact-form">
+          <input type="hidden" name="form-name" value="contact">
+          
+          <div class="form-group">
+            <label for="name">Your Name*</label>
+            <input type="text" name="name" id="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Your Email*</label>
+            <input type="email" name="email" id="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message*</label>
+            <textarea name="message" id="message" rows="6" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+
+        <hr style="margin: 3rem 0;">
 
         <div class="contact-info">
+          <h2>Reach Out Directly</h2>
           <p>📧 <a href="mailto:info@caringforpops.com">info@caringforpops.com</a></p>
           <p>📧 <a href="mailto:lyndsay@caringforpops.com">lyndsay@caringforpops.com</a></p>
         </div>
 
-        <a class="btn btn-outline" href="/">← Back to Home</a>
+        <p style="margin-top: 2rem;"><a class="btn btn-outline" href="/">← Back to Home</a></p>
       </div>
     </section>
   </main>
