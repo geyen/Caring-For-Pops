@@ -1,14 +1,22 @@
-// Get current user function for Netlify
 const { getUserFromRequest } = require('./utils/auth');
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
     const user = await getUserFromRequest(event);
-    
+
     if (!user) {
       return {
         statusCode: 401,
         body: JSON.stringify({ error: 'Not authenticated' })
+      };
+    }
+
+    // Restrict to provider roles only
+    const validProviderRoles = ['basic', 'growth', 'elite'];
+    if (!validProviderRoles.includes(user.subscriptionLevel)) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({ error: 'Access denied. Not a provider account.' })
       };
     }
 
